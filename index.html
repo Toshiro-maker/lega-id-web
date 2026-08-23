@@ -10,10 +10,6 @@
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <!-- Font Awesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Flatpickr CSS & JS untuk memaksakan format 24 Jam pada input waktu -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
         tailwind.config = {
@@ -39,6 +35,22 @@
         }
         .toggle-checkbox:checked + .toggle-label:before {
             transform: translateX(100%);
+        }
+        
+        /* Menyembunyikan scrollbar bawaan agar Scroll Picker terlihat lebih bersih */
+        select::-webkit-scrollbar {
+            display: none;
+        }
+        select {
+            -ms-overflow-style: none;
+            scrollbar-width: none; 
+        }
+        /* Menghilangkan tanda panah bawaan browser pada elemen select */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            text-indent: 1px;
+            text-overflow: '';
         }
     </style>
 </head>
@@ -111,23 +123,23 @@
                 </div>
             </div>
 
-            <!-- Jadwal Pakan -->
+            <!-- Jadwal Pakan Menggunakan Custom Scroll Picker -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 1</span>
-                        <input type="text" value="06:25" class="time-picker border rounded p-1 text-slate-700 outline-none w-28 text-center bg-white cursor-pointer" readonly>
+                        <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="06:25"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 2</span>
-                        <input type="text" value="12:30" class="time-picker border rounded p-1 text-slate-700 outline-none w-28 text-center bg-white cursor-pointer" readonly>
+                        <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="12:30"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 3</span>
-                        <input type="text" value="17:30" class="time-picker border rounded p-1 text-slate-700 outline-none w-28 text-center bg-white cursor-pointer" readonly>
+                        <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="17:30"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                 </div>
@@ -178,17 +190,17 @@
                 <div class="space-y-2 mb-4 text-sm">
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 1</span>
-                        <input type="text" value="06:25" class="time-picker border rounded p-1 text-slate-700 outline-none w-28 text-center bg-white cursor-pointer" readonly>
+                        <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="06:25"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
                         <span>Jadwal 2</span>
-                        <input type="text" value="12:30" class="time-picker border rounded p-1 text-slate-700 outline-none w-28 text-center bg-white cursor-pointer" readonly>
+                        <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="12:30"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer" checked>
                     </div>
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 3</span>
-                        <input type="text" value="17:30" class="time-picker border rounded p-1 text-slate-700 outline-none w-28 text-center bg-white cursor-pointer" readonly>
+                        <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="17:30"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                 </div>
@@ -238,17 +250,17 @@
                 <div class="space-y-2 mb-4 text-sm">
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
                         <span>Jadwal 1</span>
-                        <input type="text" value="06:25" class="time-picker border rounded p-1 text-slate-700 outline-none w-28 text-center bg-white cursor-pointer" readonly>
+                        <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="06:25"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer" checked>
                     </div>
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 2</span>
-                        <input type="text" value="12:30" class="time-picker border rounded p-1 text-slate-700 outline-none w-28 text-center bg-white cursor-pointer" readonly>
+                        <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="12:30"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
                         <span>Jadwal 3</span>
-                        <input type="text" value="17:30" class="time-picker border rounded p-1 text-slate-700 outline-none w-28 text-center bg-white cursor-pointer" readonly>
+                        <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="17:30"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer" checked>
                     </div>
                 </div>
@@ -261,16 +273,43 @@
 
     <!-- SCRIPT LOGIKA WEB & MQTT -->
     <script>
-        // 1. Inisialisasi Flatpickr untuk Input Jadwal Pakan (Format Jam:Menit saja)
-        flatpickr(".time-picker", {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",   // H = Jam 24 format, i = menit.
-            time_24hr: true,     // Paksa 24 Jam di pop-up
-            enableSeconds: false // Matikan pilihan detik
+        // 1. Script Pembangkit UI Custom Scroll Picker (ANTI AM/PM)
+        document.querySelectorAll('.custom-scroll-picker').forEach(container => {
+            const defaultTime = container.getAttribute('data-default');
+            const [defHour, defMin] = defaultTime.split(':');
+
+            // Kotak Scroll Jam (00 - 23)
+            const selHour = document.createElement('select');
+            selHour.className = "bg-transparent outline-none text-center cursor-pointer font-bold text-slate-700 text-sm hover:text-primary transition-colors w-10 text-center";
+            for(let i = 0; i < 24; i++) {
+                let val = String(i).padStart(2, '0');
+                let opt = new Option(val, val);
+                if(val === defHour) opt.selected = true;
+                selHour.add(opt);
+            }
+
+            // Pemisah Titik Dua (:)
+            const span = document.createElement('span');
+            span.textContent = ':';
+            span.className = "font-bold text-slate-400 -mt-0.5";
+
+            // Kotak Scroll Menit (00 - 59)
+            const selMin = document.createElement('select');
+            selMin.className = "bg-transparent outline-none text-center cursor-pointer font-bold text-slate-700 text-sm hover:text-primary transition-colors w-10 text-center";
+            for(let i = 0; i < 60; i++) {
+                let val = String(i).padStart(2, '0');
+                let opt = new Option(val, val);
+                if(val === defMin) opt.selected = true;
+                selMin.add(opt);
+            }
+
+            // Masukkan ke dalam DOM
+            container.appendChild(selHour);
+            container.appendChild(span);
+            container.appendChild(selMin);
         });
 
-        // 2. Script Jam Utama Real-time (Tetap menggunakan Jam:Menit:Detik)
+        // 2. Script Jam Utama Real-time 
         function updateTime() {
             const now = new Date();
             
@@ -287,7 +326,7 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // 3. Script Koneksi MQTT (Simulasi ke Broker Publik HiveMQ)
+        // 3. Script Koneksi MQTT 
         const mqttClient = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
         const statusElement = document.getElementById('cloud-status');
 
