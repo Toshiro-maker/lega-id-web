@@ -74,7 +74,7 @@
     </header>
 
     <!-- KONTEN KOLAM (GRID) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
         <!-- ================= KOLAM 1 ================= -->
         <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition">
@@ -93,37 +93,33 @@
                 </div>
             </div>
 
-            <!-- Kontrol Manual -->
             <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
                 <div class="flex justify-between items-center gap-2">
-                    <!-- Air Masuk -->
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Masuk</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer" checked>
+                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="1" data-action="Air Masuk" checked>
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
                             <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
                         </div>
                     </label>
-                    <!-- Air Keluar -->
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Keluar</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer" checked>
+                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="1" data-action="Air Keluar" checked>
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-danger transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
                             <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
                         </div>
                     </label>
-                    <!-- Pakan (Diberikan kelas pakan-toggle agar otomatis kembali OFF setelah 1 detik) -->
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Pakan</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer pakan-toggle">
+                            <input type="checkbox" class="sr-only peer pakan-toggle action-toggle" data-kolam="1" data-action="Pakan Otomatis (1 Detik)">
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-amber-500 transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -133,7 +129,6 @@
                 </div>
             </div>
 
-            <!-- Jadwal Pakan -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
@@ -153,7 +148,7 @@
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                 </div>
-                <button class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                <button onclick="simpanJadwal(1)" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
                     <i class="fa-solid fa-floppy-disk"></i> Simpan Jadwal
                 </button>
             </div>
@@ -177,14 +172,13 @@
                 </div>
             </div>
 
-            <!-- Kontrol Manual -->
             <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
                 <div class="flex justify-between items-center gap-2">
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Masuk</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer">
+                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="2" data-action="Air Masuk">
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -194,7 +188,7 @@
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Keluar</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer">
+                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="2" data-action="Air Keluar">
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-danger transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -204,7 +198,7 @@
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Pakan</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer pakan-toggle" checked>
+                            <input type="checkbox" class="sr-only peer pakan-toggle action-toggle" data-kolam="2" data-action="Pakan Otomatis (1 Detik)" checked>
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-amber-500 transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -214,7 +208,6 @@
                 </div>
             </div>
 
-            <!-- Jadwal Pakan -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
@@ -234,7 +227,7 @@
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                 </div>
-                <button class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                <button onclick="simpanJadwal(2)" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
                     <i class="fa-solid fa-floppy-disk"></i> Simpan Jadwal
                 </button>
             </div>
@@ -257,14 +250,13 @@
                 </div>
             </div>
 
-            <!-- Kontrol Manual -->
             <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
                 <div class="flex justify-between items-center gap-2">
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Masuk</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer">
+                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="3" data-action="Air Masuk">
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -274,7 +266,7 @@
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Keluar</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer" checked>
+                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="3" data-action="Air Keluar" checked>
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-danger transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -284,7 +276,7 @@
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Pakan</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer pakan-toggle">
+                            <input type="checkbox" class="sr-only peer pakan-toggle action-toggle" data-kolam="3" data-action="Pakan Otomatis (1 Detik)">
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-amber-500 transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -294,7 +286,6 @@
                 </div>
             </div>
 
-            <!-- Jadwal Pakan -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
@@ -314,12 +305,28 @@
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer" checked>
                     </div>
                 </div>
-                <button class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                <button onclick="simpanJadwal(3)" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
                     <i class="fa-solid fa-floppy-disk"></i> Simpan Jadwal
                 </button>
             </div>
         </div>
     </div>
+
+    <!-- ================= LIVE ACTIVITY LOG ================= -->
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-primary"></i> Live Activity Log (Riwayat Aktivitas)
+            </h2>
+            <button onclick="clearLogs()" class="text-xs bg-slate-200 hover:bg-red-100 hover:text-red-600 font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                <i class="fa-solid fa-trash-can mr-1"></i> Bersihkan Log
+            </button>
+        </div>
+        <!-- Wadah List Log -->
+        <div id="log-container" class="bg-slate-900 text-slate-200 font-mono text-xs p-4 rounded-xl h-40 overflow-y-auto space-y-2">
+            <div class="text-slate-500 italic">[Sistem siap merekam aktivitas kontrol manual dan jadwal pakan...]</div>
+        </div>
+    </section>
 
     <!-- SCRIPT LOGIKA WEB & MQTT -->
     <script>
@@ -355,11 +362,72 @@
             container.appendChild(selMin);
         });
 
-        // 2. Fungsi Otomatis Kembali OFF untuk Tombol Pakan (Delay 1 Detik)
+        // Fungsi Pembantu untuk Mendapatkan Jam Sistem saat ini
+        function getCurrentTimeStamp() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+
+        // Fungsi Menambahkan Pesan ke Log Container
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('log-container');
+            
+            // Hapus teks placeholder awal jika masih ada
+            if (logContainer.querySelector('.italic')) {
+                logContainer.innerHTML = '';
+            }
+
+            const timeStamp = getCurrentTimeStamp();
+            const logItem = document.createElement('div');
+            
+            let colorClass = 'text-green-400';
+            if (type === 'action') colorClass = 'text-sky-400';
+            if (type === 'schedule') colorClass = 'text-amber-400';
+
+            logItem.className = `flex items-center gap-2 border-b border-slate-800 pb-1`;
+            logItem.innerHTML = `<span class="text-slate-500">[${timeStamp}]</span> <span class="${colorClass}">${message}</span>`;
+            
+            logContainer.prepend(logItem); // Menampilkan log terbaru di urutan paling atas
+        }
+
+        function clearLogs() {
+            document.getElementById('log-container').innerHTML = '<div class="text-slate-500 italic">[Log dibersihkan oleh pengguna]</div>';
+        }
+
+        // 2. Deteksi Tombol Kontrol Manual (Slide Button)
+        document.querySelectorAll('.action-toggle').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const kolam = this.getAttribute('data-kolam');
+                const action = this.getAttribute('data-action');
+                const state = this.checked ? 'ON' : 'OFF';
+                
+                addLog(`Kolam ${kolam} -> ${action} diubah ke <span class="font-bold underline">${state}</span>`, 'action');
+            });
+        });
+
+        // 3. Deteksi Aksi Simpan Jadwal Pakan
+        function simpanJadwal(kolamId) {
+            // Cari card kolam yang bersangkutan
+            const kolamCard = document.querySelectorAll('.grid > div')[kolamId - 1];
+            const pickers = kolamCard.querySelectorAll('.custom-scroll-picker');
+            
+            let jadwalText = [];
+            pickers.forEach((picker, index) => {
+                const selects = picker.querySelectorAll('select');
+                jadwalText.push(`Jadwal ${index+1}: ${selects[0].value}:${selects[1].value}`);
+            });
+
+            addLog(`Jadwal Pakan Kolam ${kolamId} diperbarui (${jadwalText.join(', ')})`, 'schedule');
+            alert(`Jadwal Pakan untuk Kolam ${kolamId} berhasil disimpan!`);
+        }
+
+        // 4. Fungsi Otomatis Kembali OFF untuk Tombol Pakan (Delay 1 Detik)
         document.querySelectorAll('.pakan-toggle').forEach(toggle => {
             toggle.addEventListener('change', function() {
                 if (this.checked) {
-                    // Jika tombol pakan diubah menjadi ON, tunggu 1 detik lalu kembalikan ke OFF
                     setTimeout(() => {
                         this.checked = false;
                     }, 1000);
@@ -367,10 +435,9 @@
             });
         });
 
-        // 3. Script Jam Utama Real-time 
+        // 5. Script Jam Utama Real-time Header
         function updateTime() {
             const now = new Date();
-            
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
@@ -384,7 +451,7 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // 4. Script Koneksi MQTT 
+        // 6. Script Koneksi MQTT 
         const mqttClient = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
         const statusElement = document.getElementById('cloud-status');
 
@@ -392,6 +459,7 @@
             console.log('Terhubung ke Cloud MQTT!');
             statusElement.className = "px-3 py-1 rounded-full bg-green-100 text-green-700 flex items-center gap-2";
             statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> Terhubung`;
+            addLog('Terhubung secara sukses ke Cloud MQTT Broker', 'info');
             
             mqttClient.subscribe('lega_id/sensor/#');
         });
@@ -399,6 +467,7 @@
         mqttClient.on('error', function () {
             statusElement.className = "px-3 py-1 rounded-full bg-red-100 text-red-600 flex items-center gap-2";
             statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Terputus`;
+            addLog('Koneksi ke Cloud MQTT terputus atau gagal', 'error');
         });
     </script>
 </body>
