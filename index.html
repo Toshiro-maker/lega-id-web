@@ -25,18 +25,6 @@
         }
     </script>
     <style>
-        /* Gaya khusus untuk toggle switch */
-        .toggle-checkbox:checked {
-            right: 0;
-            border-color: #22c55e;
-        }
-        .toggle-checkbox:checked + .toggle-label {
-            background-color: #22c55e;
-        }
-        .toggle-checkbox:checked + .toggle-label:before {
-            transform: translateX(100%);
-        }
-        
         /* Menyembunyikan scrollbar bawaan agar Scroll Picker terlihat lebih bersih */
         select::-webkit-scrollbar {
             display: none;
@@ -105,25 +93,44 @@
                 </div>
             </div>
 
+            <!-- Kontrol Manual dengan Teks ON/OFF -->
             <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
                 <div class="flex justify-between items-center gap-2">
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Masuk</span>
-                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox" checked><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                        <div class="relative w-14 h-7">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
+                            <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
+                            <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
+                            <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
+                        </div>
                     </label>
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Keluar</span>
-                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox" checked><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                        <div class="relative w-14 h-7">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
+                            <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
+                            <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
+                            <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
+                        </div>
                     </label>
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Pakan</span>
-                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox"><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                        <div class="relative w-14 h-7">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
+                            <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
+                            <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
+                            <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
+                        </div>
                     </label>
                 </div>
             </div>
 
-            <!-- Jadwal Pakan Menggunakan Custom Scroll Picker -->
+            <!-- Jadwal Pakan -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
@@ -167,24 +174,44 @@
                 </div>
             </div>
 
+            <!-- Kontrol Manual dengan Teks ON/OFF -->
             <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
                 <div class="flex justify-between items-center gap-2">
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Masuk</span>
-                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox"><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                        <div class="relative w-14 h-7">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
+                            <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
+                            <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
+                            <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
+                        </div>
                     </label>
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Keluar</span>
-                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox"><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                        <div class="relative w-14 h-7">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
+                            <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
+                            <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
+                            <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
+                        </div>
                     </label>
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Pakan</span>
-                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox" checked><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                        <div class="relative w-14 h-7">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
+                            <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
+                            <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
+                            <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
+                        </div>
                     </label>
                 </div>
             </div>
 
+            <!-- Jadwal Pakan -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
@@ -227,24 +254,44 @@
                 </div>
             </div>
 
+            <!-- Kontrol Manual dengan Teks ON/OFF -->
             <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
                 <div class="flex justify-between items-center gap-2">
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Masuk</span>
-                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox"><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                        <div class="relative w-14 h-7">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
+                            <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
+                            <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
+                            <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
+                        </div>
                     </label>
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Keluar</span>
-                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox" checked><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                        <div class="relative w-14 h-7">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
+                            <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
+                            <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
+                            <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
+                        </div>
                     </label>
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Pakan</span>
-                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox"><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                        <div class="relative w-14 h-7">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
+                            <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
+                            <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
+                            <div class="absolute top-1 left-1 bg-white w-5 h-5 rounded-full shadow-sm transition-transform duration-300 peer-checked:translate-x-7 pointer-events-none"></div>
+                        </div>
                     </label>
                 </div>
             </div>
 
+            <!-- Jadwal Pakan -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
