@@ -4,26 +4,306 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LeGa.id - Smart Lele Galon</title>
-    <!-- Memanggil Tailwind CSS untuk Desain -->
+    <!-- Tailwind CSS untuk Desain Modern -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Memanggil MQTT.js untuk Koneksi IoT -->
+    <!-- MQTT.js untuk Koneksi IoT -->
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-</head>
-<body class="bg-gray-100 p-5 font-sans">
-    <h1 class="text-3xl font-bold text-center text-blue-600 mb-5">Dashboard LeGa.id</h1>
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <div class="bg-white p-5 rounded-2xl shadow-lg max-w-sm mx-auto">
-        <h2 class="font-bold text-xl mb-2 text-gray-800">Kolam 1</h2>
-        <p class="text-gray-600">Level Air: <span id="level-air" class="font-bold text-blue-500">70%</span></p>
-        <button class="bg-green-500 hover:bg-green-600 text-white font-bold px-4 py-2 rounded-lg mt-4 w-full transition">
-            Pompa Air (ON/OFF)
-        </button>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0ea5e9', // Biru muda modern
+                        danger: '#ef4444',  // Merah peringatan
+                        success: '#22c55e', // Hijau aman
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Gaya khusus untuk toggle switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #22c55e;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #22c55e;
+        }
+        .toggle-checkbox:checked + .toggle-label:before {
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 antialiased p-4 md:p-8">
+
+    <!-- HEADER DASHBOARD -->
+    <header class="bg-white rounded-2xl shadow-sm p-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <!-- Waktu & Tanggal -->
+        <div class="text-center md:text-left">
+            <div id="date-display" class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Memuat tanggal...</div>
+            <div id="clock-display" class="text-3xl font-bold text-slate-800 flex items-center justify-center md:justify-start gap-2">
+                <i class="fa-regular fa-clock text-primary"></i> <span>00:00:00</span>
+            </div>
+        </div>
+
+        <!-- Judul & Status Cloud -->
+        <div class="text-center">
+            <h1 class="text-3xl font-extrabold text-slate-800 mb-1">Smart <span class="text-primary">Lele Galon</span></h1>
+            <div class="flex items-center justify-center gap-2 text-sm font-medium">
+                Status Cloud: 
+                <span id="cloud-status" class="px-3 py-1 rounded-full bg-red-100 text-red-600 flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Terputus
+                </span>
+            </div>
+        </div>
+
+        <!-- Level Pakan Utama -->
+        <div class="bg-primary/10 rounded-xl p-4 text-center min-w-[150px]">
+            <i class="fa-solid fa-sack-xmark text-primary text-2xl mb-1"></i>
+            <div class="text-sm font-bold text-slate-600">Level Pakan</div>
+            <div class="text-2xl font-black text-primary">90%</div>
+        </div>
+    </header>
+
+    <!-- KONTEN KOLAM (GRID) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- ================= KOLAM 1 ================= -->
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-slate-800">Kolam 1</h2>
+                <span class="text-sm font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-lg">Aman</span>
+            </div>
+            
+            <!-- Progress Bar Level Air -->
+            <div class="mb-6">
+                <div class="flex justify-between text-sm mb-1 font-semibold text-slate-600">
+                    <span>Level Air</span>
+                    <span class="text-primary">70%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-3">
+                    <div class="bg-primary h-3 rounded-full" style="width: 70%"></div>
+                </div>
+            </div>
+
+            <!-- Toggle Kontrol Manual -->
+            <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
+                <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
+                <div class="flex justify-between items-center gap-2">
+                    <!-- Air Masuk -->
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <span class="text-xs font-semibold mb-2">Air Masuk</span>
+                        <div class="relative">
+                            <input type="checkbox" class="sr-only toggle-checkbox" checked>
+                            <div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div>
+                        </div>
+                    </label>
+                    <!-- Air Keluar -->
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <span class="text-xs font-semibold mb-2">Air Keluar</span>
+                        <div class="relative">
+                            <input type="checkbox" class="sr-only toggle-checkbox" checked>
+                            <div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div>
+                        </div>
+                    </label>
+                    <!-- Pakan -->
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <span class="text-xs font-semibold mb-2">Pakan</span>
+                        <div class="relative">
+                            <input type="checkbox" class="sr-only toggle-checkbox">
+                            <div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Jadwal Pakan -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
+                <div class="space-y-2 mb-4 text-sm">
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
+                        <span>Jadwal 1</span>
+                        <input type="time" value="06:25" class="border rounded p-1 text-slate-700 outline-none">
+                        <input type="checkbox" class="w-4 h-4 accent-primary">
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
+                        <span>Jadwal 2</span>
+                        <input type="time" value="12:30" class="border rounded p-1 text-slate-700 outline-none">
+                        <input type="checkbox" class="w-4 h-4 accent-primary">
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
+                        <span>Jadwal 3</span>
+                        <input type="time" value="17:30" class="border rounded p-1 text-slate-700 outline-none">
+                        <input type="checkbox" class="w-4 h-4 accent-primary">
+                    </div>
+                </div>
+                <button class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan Jadwal
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= KOLAM 2 (Contoh Alert Air Rendah) ================= -->
+        <div class="bg-white rounded-2xl shadow-md p-6 border-2 border-danger/20 hover:shadow-lg transition relative overflow-hidden">
+            <!-- Indikator Peringatan -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-danger"></div>
+            
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-slate-800">Kolam 2</h2>
+                <span class="text-sm font-bold px-3 py-1 bg-red-100 text-red-700 rounded-lg animate-pulse">Kritis!</span>
+            </div>
+            
+            <!-- Progress Bar Level Air -->
+            <div class="mb-6">
+                <div class="flex justify-between text-sm mb-1 font-semibold text-slate-600">
+                    <span>Level Air</span>
+                    <span class="text-danger font-bold">20%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-3">
+                    <div class="bg-danger h-3 rounded-full" style="width: 20%"></div>
+                </div>
+            </div>
+
+            <!-- Toggle Kontrol Manual -->
+            <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
+                <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
+                <div class="flex justify-between items-center gap-2">
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <span class="text-xs font-semibold mb-2">Air Masuk</span>
+                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox"><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                    </label>
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <span class="text-xs font-semibold mb-2">Air Keluar</span>
+                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox"><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                    </label>
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <span class="text-xs font-semibold mb-2">Pakan</span>
+                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox" checked><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Jadwal Pakan -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
+                <div class="space-y-2 mb-4 text-sm">
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
+                        <span>Jadwal 1</span><input type="time" value="06:25" class="border rounded p-1 text-slate-700 outline-none"><input type="checkbox" class="w-4 h-4 accent-primary">
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
+                        <span>Jadwal 2</span><input type="time" value="12:30" class="border rounded p-1 text-slate-700 outline-none"><input type="checkbox" class="w-4 h-4 accent-primary" checked>
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
+                        <span>Jadwal 3</span><input type="time" value="17:30" class="border rounded p-1 text-slate-700 outline-none"><input type="checkbox" class="w-4 h-4 accent-primary">
+                    </div>
+                </div>
+                <button class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan Jadwal
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= KOLAM 3 ================= -->
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-slate-800">Kolam 3</h2>
+                <span class="text-sm font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-lg">Aman</span>
+            </div>
+            
+            <!-- Progress Bar Level Air -->
+            <div class="mb-6">
+                <div class="flex justify-between text-sm mb-1 font-semibold text-slate-600">
+                    <span>Level Air</span>
+                    <span class="text-primary">70%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-3">
+                    <div class="bg-primary h-3 rounded-full" style="width: 70%"></div>
+                </div>
+            </div>
+
+            <!-- Toggle Kontrol Manual -->
+            <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
+                <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
+                <div class="flex justify-between items-center gap-2">
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <span class="text-xs font-semibold mb-2">Air Masuk</span>
+                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox"><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                    </label>
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <span class="text-xs font-semibold mb-2">Air Keluar</span>
+                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox" checked><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                    </label>
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <span class="text-xs font-semibold mb-2">Pakan</span>
+                        <div class="relative"><input type="checkbox" class="sr-only toggle-checkbox"><div class="block bg-slate-300 w-12 h-7 rounded-full toggle-label transition-colors duration-300 before:content-[''] before:absolute before:top-1 before:left-1 before:bg-white before:w-5 before:h-5 before:rounded-full before:transition-transform before:duration-300"></div></div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Jadwal Pakan -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
+                <div class="space-y-2 mb-4 text-sm">
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
+                        <span>Jadwal 1</span><input type="time" value="06:25" class="border rounded p-1 text-slate-700 outline-none"><input type="checkbox" class="w-4 h-4 accent-primary" checked>
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
+                        <span>Jadwal 2</span><input type="time" value="12:30" class="border rounded p-1 text-slate-700 outline-none"><input type="checkbox" class="w-4 h-4 accent-primary">
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
+                        <span>Jadwal 3</span><input type="time" value="17:30" class="border rounded p-1 text-slate-700 outline-none"><input type="checkbox" class="w-4 h-4 accent-primary" checked>
+                    </div>
+                </div>
+                <button class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan Jadwal
+                </button>
+            </div>
+        </div>
     </div>
 
+    <!-- SCRIPT LOGIKA WEB & MQTT -->
     <script>
-        // Logika koneksi ke sistem embedded Anda diletakkan di sini
-        const client = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
-        client.on('connect', () => console.log('Koneksi LeGa.id ke Cloud Berhasil!'));
+        // 1. Script Jam Real-time
+        function updateTime() {
+            const now = new Date();
+            
+            // Format Jam (HH:MM:SS)
+            const timeString = now.toLocaleTimeString('id-ID', { hour12: false });
+            document.querySelector('#clock-display span').textContent = timeString;
+            
+            // Format Tanggal (Jum'at, 07 Agustus 2026)
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: '2-digit' };
+            document.getElementById('date-display').textContent = now.toLocaleDateString('id-ID', options);
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // 2. Script Koneksi MQTT (Simulasi ke Broker Publik HiveMQ)
+        // Ganti URL dengan broker milik Anda jika ada
+        const mqttClient = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
+        const statusElement = document.getElementById('cloud-status');
+
+        mqttClient.on('connect', function () {
+            console.log('Terhubung ke Cloud MQTT!');
+            // Ubah badge status menjadi hijau
+            statusElement.className = "px-3 py-1 rounded-full bg-green-100 text-green-700 flex items-center gap-2";
+            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> Terhubung`;
+            
+            // Subscribe ke topik sensor (Contoh)
+            mqttClient.subscribe('lega_id/sensor/#');
+        });
+
+        mqttClient.on('error', function () {
+            statusElement.className = "px-3 py-1 rounded-full bg-red-100 text-red-600 flex items-center gap-2";
+            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Terputus`;
+        });
+        
+        // Logika untuk mengirim perintah saat toggle ditekan bisa ditambahkan di sini nantinya
+        // Contoh: mqttClient.publish('lega_id/kolam1/pompa_masuk', 'ON');
     </script>
 </body>
 </html>
