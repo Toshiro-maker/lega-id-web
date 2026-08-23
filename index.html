@@ -267,7 +267,7 @@
 
     <!-- SCRIPT LOGIKA WEB & MQTT -->
     <script>
-        // 1. Script Jam Real-time
+        // 1. Script Jam Real-time (Format 24 Jam)
         function updateTime() {
             const now = new Date();
             
@@ -285,7 +285,7 @@
         }
         setInterval(updateTime, 1000);
         updateTime();
-        
+
         // 2. Script Koneksi MQTT (Simulasi ke Broker Publik HiveMQ)
         // Ganti URL dengan broker milik Anda jika ada
         const mqttClient = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
