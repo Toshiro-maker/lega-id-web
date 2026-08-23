@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeGa.id - Smart Lele Galon</title>
+    <!-- Memanggil Tailwind CSS untuk Desain -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memanggil MQTT.js untuk Koneksi IoT -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body class="bg-gray-100 p-5 font-sans">
+    <h1 class="text-3xl font-bold text-center text-blue-600 mb-5">Dashboard LeGa.id</h1>
+    
+    <div class="bg-white p-5 rounded-2xl shadow-lg max-w-sm mx-auto">
+        <h2 class="font-bold text-xl mb-2 text-gray-800">Kolam 1</h2>
+        <p class="text-gray-600">Level Air: <span id="level-air" class="font-bold text-blue-500">70%</span></p>
+        <button class="bg-green-500 hover:bg-green-600 text-white font-bold px-4 py-2 rounded-lg mt-4 w-full transition">
+            Pompa Air (ON/OFF)
+        </button>
+    </div>
+
+    <script>
+        // Logika koneksi ke sistem embedded Anda diletakkan di sini
+        const client = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
+        client.on('connect', () => console.log('Koneksi LeGa.id ke Cloud Berhasil!'));
+    </script>
+</body>
+</html>
