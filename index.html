@@ -465,7 +465,7 @@
             });
         });
 
-        // Subscribe / Menerima Data Sensor & Jadwal
+// Subscribe / Menerima Data Sensor & Jadwal
         mqttClient.on('message', function (topic, message) {
             if (topic === 'lega_id/status') {
                 try {
@@ -484,9 +484,25 @@
 
                         const txtLevelAir = card.querySelector('.flex.justify-between.text-sm.mb-1 span:last-child');
                         const divBarAir = card.querySelector('.rounded-full > div');
-                        if(txtLevelAir && divBarAir) {
+                        const statusBadge = card.querySelector('h2').nextElementSibling; // Mengambil elemen badge status
+                        
+                        if(txtLevelAir && divBarAir && statusBadge) {
                             txtLevelAir.textContent = pond.level + '%';
                             divBarAir.style.width = pond.level + '%';
+                            
+                            // --- LOGIKA STATUS AMAN / KRITIS ---
+                            // Anggap Kritis jika level air <= 30%. Kamu bisa ubah angkanya sesuai kebutuhan.
+                            if (pond.level <= 30) {
+                                statusBadge.textContent = "Kritis!";
+                                statusBadge.className = "text-sm font-bold px-3 py-1 bg-red-100 text-red-700 rounded-lg animate-pulse";
+                                txtLevelAir.className = "text-danger font-bold";
+                                divBarAir.className = "bg-danger h-3 rounded-full";
+                            } else {
+                                statusBadge.textContent = "Aman";
+                                statusBadge.className = "text-sm font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-lg";
+                                txtLevelAir.className = "text-primary";
+                                divBarAir.className = "bg-primary h-3 rounded-full transition-all duration-500";
+                            }
                         }
 
                         const inputs = card.querySelectorAll('input.action-toggle');
@@ -500,7 +516,7 @@
                     console.error("Gagal parsing JSON MQTT: ", e);
                 }
             }
-            
+                       
             if (topic === 'lega_id/jadwal_sync') {
                 try {
                     const data = JSON.parse(message.toString());
