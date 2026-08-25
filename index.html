@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <!-- Font Awesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+ 
     <script>
         tailwind.config = {
             theme: {
@@ -43,7 +43,7 @@
     </style>
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 antialiased p-4 md:p-8">
-
+ 
     <!-- HEADER DASHBOARD -->
     <header class="bg-white rounded-2xl shadow-sm p-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <!-- Waktu & Tanggal -->
@@ -53,7 +53,7 @@
                 <i class="fa-regular fa-clock text-primary"></i> <span>00:00:00</span>
             </div>
         </div>
-
+ 
         <!-- Judul & Status Cloud -->
         <div class="text-center">
             <h1 class="text-3xl font-extrabold text-slate-800 mb-1">Smart <span class="text-primary">Lele Galon</span></h1>
@@ -64,18 +64,18 @@
                 </span>
             </div>
         </div>
-
+ 
         <!-- Level Pakan Utama -->
         <div class="bg-primary/10 rounded-xl p-4 text-center min-w-[150px]">
             <i class="fa-solid fa-sack-xmark text-primary text-2xl mb-1"></i>
             <div class="text-sm font-bold text-slate-600">Level Pakan</div>
-            <div class="text-2xl font-black text-primary">0%</div>
+            <div class="text-2xl font-black text-primary">90%</div>
         </div>
     </header>
-
+ 
     <!-- KONTEN KOLAM (GRID) -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-
+ 
         <!-- ================= KOLAM 1 ================= -->
         <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition">
             <div class="flex justify-between items-center mb-4">
@@ -92,14 +92,14 @@
                     <div class="bg-primary h-3 rounded-full" style="width: 70%"></div>
                 </div>
             </div>
-
+ 
             <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
                 <div class="flex justify-between items-center gap-2">
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Masuk</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="1" data-action="Air Masuk" checked>
+                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="1" data-action="Air Masuk">
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-success transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -109,7 +109,7 @@
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Keluar</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="1" data-action="Air Keluar" checked>
+                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="1" data-action="Air Keluar">
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-danger transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -128,7 +128,7 @@
                     </label>
                 </div>
             </div>
-
+ 
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
@@ -153,7 +153,7 @@
                 </button>
             </div>
         </div>
-
+ 
         <!-- ================= KOLAM 2 ================= -->
         <div class="bg-white rounded-2xl shadow-md p-6 border-2 border-danger/20 hover:shadow-lg transition relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-1 bg-danger"></div>
@@ -171,7 +171,7 @@
                     <div class="bg-danger h-3 rounded-full" style="width: 20%"></div>
                 </div>
             </div>
-
+ 
             <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
                 <div class="flex justify-between items-center gap-2">
@@ -198,7 +198,7 @@
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Pakan</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer pakan-toggle action-toggle" data-kolam="2" data-action="Pakan Otomatis (1 Detik)" checked>
+                            <input type="checkbox" class="sr-only peer pakan-toggle action-toggle" data-kolam="2" data-action="Pakan Otomatis (1 Detik)">
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-amber-500 transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -207,7 +207,7 @@
                     </label>
                 </div>
             </div>
-
+ 
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
@@ -219,7 +219,7 @@
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
                         <span>Jadwal 2</span>
                         <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="12:30"></div>
-                        <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer" checked>
+                        <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 3</span>
@@ -232,7 +232,7 @@
                 </button>
             </div>
         </div>
-
+ 
         <!-- ================= KOLAM 3 ================= -->
         <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition">
             <div class="flex justify-between items-center mb-4">
@@ -249,7 +249,7 @@
                     <div class="bg-primary h-3 rounded-full" style="width: 70%"></div>
                 </div>
             </div>
-
+ 
             <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider text-center">Kontrol Manual</h3>
                 <div class="flex justify-between items-center gap-2">
@@ -266,7 +266,7 @@
                     <label class="flex flex-col items-center cursor-pointer">
                         <span class="text-xs font-semibold mb-2">Air Keluar</span>
                         <div class="relative w-14 h-7">
-                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="3" data-action="Air Keluar" checked>
+                            <input type="checkbox" class="sr-only peer action-toggle" data-kolam="3" data-action="Air Keluar">
                             <div class="w-full h-full bg-slate-300 rounded-full peer-checked:bg-danger transition-colors duration-300"></div>
                             <span class="absolute right-2 top-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:opacity-0 transition-opacity duration-300 pointer-events-none">OFF</span>
                             <span class="absolute left-2 top-1.5 text-[10px] font-extrabold text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none">ON</span>
@@ -285,14 +285,14 @@
                     </label>
                 </div>
             </div>
-
+ 
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
                         <span>Jadwal 1</span>
                         <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="06:25"></div>
-                        <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer" checked>
+                        <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 2</span>
@@ -302,7 +302,7 @@
                     <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
                         <span>Jadwal 3</span>
                         <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="17:30"></div>
-                        <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer" checked>
+                        <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
                 </div>
                 <button onclick="simpanJadwal(3)" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
@@ -311,30 +311,29 @@
             </div>
         </div>
     </div>
-
+ 
     <!-- ================= LIVE ACTIVITY LOG ================= -->
     <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                <i class="fa-solid fa-clock-rotate-left text-primary"></i> Live Activity Log (Riwayat Aktivitas)
+                <i class="fa-solid fa-clock-rotate-left text-primary"></i> Live Activity Log
             </h2>
             <button onclick="clearLogs()" class="text-xs bg-slate-200 hover:bg-red-100 hover:text-red-600 font-semibold px-3 py-1.5 rounded-lg transition-colors">
                 <i class="fa-solid fa-trash-can mr-1"></i> Bersihkan Log
             </button>
         </div>
-        <!-- Wadah List Log -->
         <div id="log-container" class="bg-slate-900 text-slate-200 font-mono text-xs p-4 rounded-xl h-40 overflow-y-auto space-y-2">
             <div class="text-slate-500 italic">[Sistem siap merekam aktivitas kontrol manual dan jadwal pakan...]</div>
         </div>
     </section>
-
-    <!-- SCRIPT LOGIKA WEB & MQTT -->
+ 
+    <!-- ================= SCRIPT LOGIKA WEB & MQTT ================= -->
     <script>
         // 1. Script Pembangkit UI Custom Scroll Picker (ANTI AM/PM)
         document.querySelectorAll('.custom-scroll-picker').forEach(container => {
             const defaultTime = container.getAttribute('data-default');
             const [defHour, defMin] = defaultTime.split(':');
-
+ 
             const selHour = document.createElement('select');
             selHour.className = "bg-transparent outline-none text-center cursor-pointer font-bold text-slate-700 text-sm hover:text-primary transition-colors w-10";
             for(let i = 0; i < 24; i++) {
@@ -343,11 +342,11 @@
                 if(val === defHour) opt.selected = true;
                 selHour.add(opt);
             }
-
+ 
             const span = document.createElement('span');
             span.textContent = ':';
             span.className = "font-bold text-slate-400 -mt-0.5";
-
+ 
             const selMin = document.createElement('select');
             selMin.className = "bg-transparent outline-none text-center cursor-pointer font-bold text-slate-700 text-sm hover:text-primary transition-colors w-10";
             for(let i = 0; i < 60; i++) {
@@ -356,13 +355,13 @@
                 if(val === defMin) opt.selected = true;
                 selMin.add(opt);
             }
-
+ 
             container.appendChild(selHour);
             container.appendChild(span);
             container.appendChild(selMin);
         });
-
-        // Fungsi Pembantu untuk Mendapatkan Jam Sistem saat ini
+ 
+        // 2. Fungsi Log Activity
         function getCurrentTimeStamp() {
             const now = new Date();
             const h = String(now.getHours()).padStart(2, '0');
@@ -370,169 +369,29 @@
             const s = String(now.getSeconds()).padStart(2, '0');
             return `${h}:${m}:${s}`;
         }
-
-        // Fungsi Menambahkan Pesan ke Log Container
+ 
         function addLog(message, type = 'info') {
             const logContainer = document.getElementById('log-container');
-            
-            // Hapus teks placeholder awal jika masih ada
-            if (logContainer.querySelector('.italic')) {
-                logContainer.innerHTML = '';
-            }
-
+            if (logContainer.querySelector('.italic')) logContainer.innerHTML = '';
+ 
             const timeStamp = getCurrentTimeStamp();
             const logItem = document.createElement('div');
             
             let colorClass = 'text-green-400';
             if (type === 'action') colorClass = 'text-sky-400';
             if (type === 'schedule') colorClass = 'text-amber-400';
-
+ 
             logItem.className = `flex items-center gap-2 border-b border-slate-800 pb-1`;
             logItem.innerHTML = `<span class="text-slate-500">[${timeStamp}]</span> <span class="${colorClass}">${message}</span>`;
             
-            logContainer.prepend(logItem); // Menampilkan log terbaru di urutan paling atas
+            logContainer.prepend(logItem); 
         }
-
+ 
         function clearLogs() {
             document.getElementById('log-container').innerHTML = '<div class="text-slate-500 italic">[Log dibersihkan oleh pengguna]</div>';
         }
-
-        // ==================== KONFIGURASI MQTT HIVEMQ CLOUD ====================
-        // Gunakan wss:// dan port 8884 untuk browser websocket
-        const mqttOptions = {
-            clientId: 'LeGaWeb_' + Math.random().toString(16).substr(2, 8),
-            username: 'LeGaTech.id',       // Username HiveMQ Anda
-            password: 'LeleGalon2026',     // Password HiveMQ Anda
-            clean: true,
-            connectTimeout: 4000
-        };
-
-        const mqttClient = mqtt.connect('wss://15bd2c53c9fd47e5a4502e8d9c51bc80.s1.eu.hivemq.cloud:8884/mqtt', mqttOptions);
-        const statusElement = document.getElementById('cloud-status');
-
-        mqttClient.on('connect', function () {
-            statusElement.className = "px-3 py-1 rounded-full bg-green-100 text-green-700 flex items-center gap-2";
-            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> Terhubung`;
-            addLog('Terhubung secara sukses ke HiveMQ Cloud', 'info');
-            
-            // Subscribe ke topik sensor ESP32
-            mqttClient.subscribe('lega/sensor/#');
-        });
-
-        mqttClient.on('error', function (error) {
-            statusElement.className = "px-3 py-1 rounded-full bg-red-100 text-red-600 flex items-center gap-2";
-            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Terputus`;
-            addLog('Koneksi ke Cloud MQTT terputus atau gagal', 'error');
-        });
-
-        // ==================== MENERIMA DATA DARI ESP32 (UPDATE UI) ====================
-        mqttClient.on('message', function (topic, message) {
-            try {
-                const payload = JSON.parse(message.toString());
-                
-                // Cek jika pesan datang dari sensor kolam (Contoh topik: lega/sensor/kolam1)
-                if (topic.startsWith('lega/sensor/kolam')) {
-                    const kolamId = parseInt(topic.replace('lega/sensor/kolam', ''));
-                    const kolamIndex = kolamId - 1; // Index array DOM dimulai dari 0
-                    
-                    // Ambil semua card kolam menggunakan hierarki grid
-                    const kolamCards = document.querySelectorAll('.grid > div');
-                    
-                    if (kolamIndex >= 0 && kolamIndex <= 2 && kolamCards[kolamIndex]) {
-                        const card = kolamCards[kolamIndex];
-                        
-                        // Update Persentase Angka Air (Mencari span persentase tanpa merubah HTML)
-                        if (payload.air !== undefined) {
-                            const levelAirSpan = card.querySelector('.flex.justify-between.text-sm span:nth-child(2)');
-                            if (levelAirSpan) levelAirSpan.textContent = payload.air + '%';
-                            
-                            // Update Lebar Progress Bar Air
-                            const progressBar = card.querySelector('.w-full.bg-slate-200 > div');
-                            if (progressBar) progressBar.style.width = payload.air + '%';
-                        }
-                    }
-                }
-                
-                // Cek jika pesan datang dari sensor pakan utama (Contoh topik: lega/sensor/pakan)
-                if (topic === 'lega/sensor/pakan' && payload.pakan !== undefined) {
-                    // Mencari elemen level pakan di header
-                    const levelPakanSpan = document.querySelector('header .bg-primary\\/10 .text-2xl');
-                    if (levelPakanSpan) levelPakanSpan.textContent = payload.pakan + '%';
-                }
-                
-            } catch (e) {
-                console.error("Gagal memproses pesan MQTT", e);
-            }
-        });
-
-        // ==================== MENGIRIM PERINTAH KE ESP32 ====================
-        // 2. Deteksi Tombol Kontrol Manual (Slide Button)
-        document.querySelectorAll('.action-toggle').forEach(toggle => {
-            toggle.addEventListener('change', function() {
-                const kolam = this.getAttribute('data-kolam');
-                const action = this.getAttribute('data-action');
-                const state = this.checked ? 'ON' : 'OFF';
-                
-                // Update Log di layar
-                addLog(`Kolam ${kolam} -> ${action} diubah ke <span class="font-bold underline">${state}</span>`, 'action');
-                
-                // Kirim (Publish) ke ESP32 melalui HiveMQ
-                const topic = `lega/kontrol/kolam${kolam}`;
-                const payload = JSON.stringify({ target: action, cmd: state });
-                
-                if (mqttClient.connected) {
-                    mqttClient.publish(topic, payload);
-                } else {
-                    addLog(`Gagal mengirim perintah. Cloud terputus!`, 'error');
-                }
-            });
-        });
-
-        // 3. Deteksi Aksi Simpan Jadwal Pakan
-        function simpanJadwal(kolamId) {
-            const kolamCard = document.querySelectorAll('.grid > div')[kolamId - 1];
-            const pickers = kolamCard.querySelectorAll('.custom-scroll-picker');
-            const checkboxes = kolamCard.querySelectorAll('.space-y-2 input[type="checkbox"]');
-            
-            let jadwalList = [];
-            let jadwalText = [];
-            
-            pickers.forEach((picker, index) => {
-                const selects = picker.querySelectorAll('select');
-                const time = `${selects[0].value}:${selects[1].value}`;
-                const isAktif = checkboxes[index].checked;
-                
-                jadwalList.push({ waktu: time, aktif: isAktif });
-                if (isAktif) jadwalText.push(`Jadwal ${index+1}: ${time}`);
-            });
-
-            addLog(`Jadwal Pakan Kolam ${kolamId} diperbarui (${jadwalText.join(', ') || 'Semua Nonaktif'})`, 'schedule');
-            
-            // Kirim jadwal ke ESP32
-            if (mqttClient.connected) {
-                mqttClient.publish(`lega/jadwal/kolam${kolamId}`, JSON.stringify({ jadwal: jadwalList }));
-            }
-            
-            alert(`Jadwal Pakan untuk Kolam ${kolamId} berhasil disimpan dan dikirim ke perangkat!`);
-        }
-
-        // 4. Fungsi Otomatis Kembali OFF untuk Tombol Pakan (Delay 1 Detik)
-        document.querySelectorAll('.pakan-toggle').forEach(toggle => {
-            toggle.addEventListener('change', function() {
-                if (this.checked) {
-                    // Biarkan perintah 'ON' terkirim oleh event listener '.action-toggle' di atas
-                    setTimeout(() => {
-                        this.checked = false;
-                        
-                        // Memicu event change manual agar status 'OFF' juga terkirim ke ESP32 dan masuk log
-                        const event = new Event('change');
-                        this.dispatchEvent(event);
-                    }, 1000);
-                }
-            });
-        });
-
-        // 5. Script Jam Utama Real-time Header
+ 
+        // 3. Script Jam Utama Real-time Header
         function updateTime() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -547,6 +406,176 @@
         }
         setInterval(updateTime, 1000);
         updateTime();
+ 
+        // 4. KONEKSI & LOGIKA MQTT
+        const mqttOptions = {
+            username: 'LeGaTech.id',
+            password: 'LeleGalon2026',
+            clientId: 'web_lega_' + Math.random().toString(16).substr(2, 8),
+            keepalive: 60,
+            protocolId: 'MQTT',
+            protocolVersion: 4,
+            clean: true,
+            reconnectPeriod: 1000,
+            connectTimeout: 30 * 1000,
+        };
+        const mqttClient = mqtt.connect('wss://15bd2c53c9fd47e5a4502e8d9c51bc80.s1.eu.hivemq.cloud:8884/mqtt', mqttOptions);
+        const statusElement = document.getElementById('cloud-status');
+ 
+        mqttClient.on('connect', function () {
+            statusElement.className = "px-3 py-1 rounded-full bg-green-100 text-green-700 flex items-center gap-2";
+            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> Terhubung`;
+            addLog('Berhasil terhubung ke Broker LeGa.id', 'info');
+            
+            mqttClient.subscribe('lega_id/status');
+            mqttClient.subscribe('lega_id/jadwal_sync'); 
+            
+            mqttClient.publish('lega_id/cmd', JSON.stringify({ cmd: "get_jadwal" }));
+        });
+ 
+        mqttClient.on('error', function () {
+            statusElement.className = "px-3 py-1 rounded-full bg-red-100 text-red-600 flex items-center gap-2";
+            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Terputus`;
+            addLog('Koneksi ke Broker terputus!', 'error');
+        });
+
+        // Publish Perintah Kontrol (Relay & Servo)
+        document.querySelectorAll('.action-toggle').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const kolam = parseInt(this.getAttribute('data-kolam')) - 1; 
+                const action = this.getAttribute('data-action');
+                const state = this.checked;
+                
+                let payload = {};
+
+                if (action === "Air Masuk") {
+                    payload = { cmd: "relay", ch: kolam * 2, state: state };
+                } else if (action === "Air Keluar") {
+                    payload = { cmd: "relay", ch: (kolam * 2) + 1, state: state };
+                } else if (action.includes("Pakan")) {
+                    payload = { cmd: "servo", pond: kolam, state: state };
+                    if (state) setTimeout(() => { this.checked = false; }, 1000);
+                }
+
+                if (mqttClient.connected) {
+                    mqttClient.publish('lega_id/cmd', JSON.stringify(payload));
+                }
+                
+                addLog(`Kolam ${kolam + 1} -> ${action} diubah ke <span class="font-bold underline">${state ? 'ON' : 'OFF'}</span>`, 'action');
+            });
+        });
+
+        // Subscribe / Menerima Data Sensor & Jadwal
+        mqttClient.on('message', function (topic, message) {
+            if (topic === 'lega_id/status') {
+                try {
+                    const data = JSON.parse(message.toString());
+                    
+                    const elPakanLevel = document.querySelector('.fa-sack-xmark').nextElementSibling.nextElementSibling;
+                    if(elPakanLevel) elPakanLevel.textContent = data.feed_level + '%';
+
+                    const pondCards = document.querySelectorAll('.grid > div');
+                    const pondData = [data.pond1, data.pond2, data.pond3];
+
+                    pondData.forEach((pond, index) => {
+                        if (!pond) return;
+                        const card = pondCards[index];
+                        if (!card) return;
+
+                        const txtLevelAir = card.querySelector('.flex.justify-between.text-sm.mb-1 span:last-child');
+                        const divBarAir = card.querySelector('.rounded-full > div');
+                        if(txtLevelAir && divBarAir) {
+                            txtLevelAir.textContent = pond.level + '%';
+                            divBarAir.style.width = pond.level + '%';
+                        }
+
+                        const inputs = card.querySelectorAll('input.action-toggle');
+                        if(inputs.length >= 3) {
+                            if (inputs[0].checked !== pond.in) inputs[0].checked = pond.in;
+                            if (inputs[1].checked !== pond.out) inputs[1].checked = pond.out;
+                            if (inputs[2].checked !== pond.feed) inputs[2].checked = pond.feed;
+                        }
+                    });
+                } catch (e) {
+                    console.error("Gagal parsing JSON MQTT: ", e);
+                }
+            }
+            
+            if (topic === 'lega_id/jadwal_sync') {
+                try {
+                    const data = JSON.parse(message.toString());
+                    if (data.type === "jadwal_sync") {
+                        const pondCards = document.querySelectorAll('.grid > div');
+                        
+                        data.ponds.forEach((jadwalKolam, indexKolam) => {
+                            const card = pondCards[indexKolam];
+                            if (!card) return;
+                            
+                            const pickers = card.querySelectorAll('.custom-scroll-picker');
+                            
+                            jadwalKolam.forEach((jam, idxJadwal) => {
+                                const picker = pickers[idxJadwal];
+                                const checkbox = picker.nextElementSibling;
+                                const selects = picker.querySelectorAll('select');
+                                
+                                if (jam === "--:--") {
+                                    checkbox.checked = false;
+                                } else {
+                                    checkbox.checked = true;
+                                    const [h, m] = jam.split(':');
+                                    selects[0].value = h;
+                                    selects[1].value = m;
+                                }
+                            });
+                        });
+                        addLog('Sinkronisasi memori Jadwal dari ESP32 berhasil dimuat.', 'schedule');
+                    }
+                } catch (e) {
+                    console.error("Gagal sinkron jadwal: ", e);
+                }
+            }
+        });
+
+        // 5. Fungsi Menyimpan Jadwal
+        function simpanJadwal(kolamId) {
+            const indexKolam = kolamId - 1; 
+            const kolamCard = document.querySelectorAll('.grid > div')[indexKolam];
+            
+            const pickers = kolamCard.querySelectorAll('.custom-scroll-picker');
+            
+            let jadwalArray = [];
+            let jadwalText = [];
+            
+            pickers.forEach((picker, index) => {
+                const selects = picker.querySelectorAll('select');
+                const timeStr = `${selects[0].value}:${selects[1].value}`;
+                
+                const isActive = picker.nextElementSibling.checked; 
+                
+                if (isActive) {
+                    jadwalArray.push(timeStr);
+                    jadwalText.push(`Jadwal ${index+1}: ${timeStr}`);
+                } else {
+                    jadwalArray.push("--:--"); 
+                }
+            });
+ 
+            const payload = {
+                cmd: "jadwal",
+                pond: indexKolam,
+                times: jadwalArray
+            };
+            
+            if (mqttClient.connected) {
+                mqttClient.publish('lega_id/cmd', JSON.stringify(payload));
+                
+                let logMsg = jadwalText.length > 0 ? jadwalText.join(', ') : 'Semua Nonaktif';
+                addLog(`Jadwal Pakan Kolam ${kolamId} disinkronkan: ${logMsg}`, 'schedule');
+                alert(`Jadwal Pakan untuk Kolam ${kolamId} berhasil disimpan ke ESP32!`);
+            } else {
+                alert(`Gagal menyimpan! Pastikan Web terhubung ke Cloud MQTT.`);
+            }
+        }
     </script>
 </body>
 </html>
