@@ -69,7 +69,7 @@
         <div class="bg-primary/10 rounded-xl p-4 text-center min-w-[150px]">
             <i class="fa-solid fa-sack-xmark text-primary text-2xl mb-1"></i>
             <div class="text-sm font-bold text-slate-600">Level Pakan</div>
-            <div class="text-2xl font-black text-primary">90%</div>
+            <div class="text-2xl font-black text-primary">0%</div>
         </div>
     </header>
 
@@ -397,6 +397,75 @@
             document.getElementById('log-container').innerHTML = '<div class="text-slate-500 italic">[Log dibersihkan oleh pengguna]</div>';
         }
 
+        // ==================== KONFIGURASI MQTT HIVEMQ CLOUD ====================
+        // Gunakan wss:// dan port 8884 untuk browser websocket
+        const mqttOptions = {
+            clientId: 'LeGaWeb_' + Math.random().toString(16).substr(2, 8),
+            username: 'LeGaTech.id',       // Username HiveMQ Anda
+            password: 'LeleGalon2026',     // Password HiveMQ Anda
+            clean: true,
+            connectTimeout: 4000
+        };
+
+        const mqttClient = mqtt.connect('wss://15bd2c53c9fd47e5a4502e8d9c51bc80.s1.eu.hivemq.cloud:8884/mqtt', mqttOptions);
+        const statusElement = document.getElementById('cloud-status');
+
+        mqttClient.on('connect', function () {
+            statusElement.className = "px-3 py-1 rounded-full bg-green-100 text-green-700 flex items-center gap-2";
+            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> Terhubung`;
+            addLog('Terhubung secara sukses ke HiveMQ Cloud', 'info');
+            
+            // Subscribe ke topik sensor ESP32
+            mqttClient.subscribe('lega/sensor/#');
+        });
+
+        mqttClient.on('error', function (error) {
+            statusElement.className = "px-3 py-1 rounded-full bg-red-100 text-red-600 flex items-center gap-2";
+            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Terputus`;
+            addLog('Koneksi ke Cloud MQTT terputus atau gagal', 'error');
+        });
+
+        // ==================== MENERIMA DATA DARI ESP32 (UPDATE UI) ====================
+        mqttClient.on('message', function (topic, message) {
+            try {
+                const payload = JSON.parse(message.toString());
+                
+                // Cek jika pesan datang dari sensor kolam (Contoh topik: lega/sensor/kolam1)
+                if (topic.startsWith('lega/sensor/kolam')) {
+                    const kolamId = parseInt(topic.replace('lega/sensor/kolam', ''));
+                    const kolamIndex = kolamId - 1; // Index array DOM dimulai dari 0
+                    
+                    // Ambil semua card kolam menggunakan hierarki grid
+                    const kolamCards = document.querySelectorAll('.grid > div');
+                    
+                    if (kolamIndex >= 0 && kolamIndex <= 2 && kolamCards[kolamIndex]) {
+                        const card = kolamCards[kolamIndex];
+                        
+                        // Update Persentase Angka Air (Mencari span persentase tanpa merubah HTML)
+                        if (payload.air !== undefined) {
+                            const levelAirSpan = card.querySelector('.flex.justify-between.text-sm span:nth-child(2)');
+                            if (levelAirSpan) levelAirSpan.textContent = payload.air + '%';
+                            
+                            // Update Lebar Progress Bar Air
+                            const progressBar = card.querySelector('.w-full.bg-slate-200 > div');
+                            if (progressBar) progressBar.style.width = payload.air + '%';
+                        }
+                    }
+                }
+                
+                // Cek jika pesan datang dari sensor pakan utama (Contoh topik: lega/sensor/pakan)
+                if (topic === 'lega/sensor/pakan' && payload.pakan !== undefined) {
+                    // Mencari elemen level pakan di header
+                    const levelPakanSpan = document.querySelector('header .bg-primary\\/10 .text-2xl');
+                    if (levelPakanSpan) levelPakanSpan.textContent = payload.pakan + '%';
+                }
+                
+            } catch (e) {
+                console.error("Gagal memproses pesan MQTT", e);
+            }
+        });
+
+        // ==================== MENGIRIM PERINTAH KE ESP32 ====================
         // 2. Deteksi Tombol Kontrol Manual (Slide Button)
         document.querySelectorAll('.action-toggle').forEach(toggle => {
             toggle.addEventListener('change', function() {
@@ -404,32 +473,60 @@
                 const action = this.getAttribute('data-action');
                 const state = this.checked ? 'ON' : 'OFF';
                 
+                // Update Log di layar
                 addLog(`Kolam ${kolam} -> ${action} diubah ke <span class="font-bold underline">${state}</span>`, 'action');
+                
+                // Kirim (Publish) ke ESP32 melalui HiveMQ
+                const topic = `lega/kontrol/kolam${kolam}`;
+                const payload = JSON.stringify({ target: action, cmd: state });
+                
+                if (mqttClient.connected) {
+                    mqttClient.publish(topic, payload);
+                } else {
+                    addLog(`Gagal mengirim perintah. Cloud terputus!`, 'error');
+                }
             });
         });
 
         // 3. Deteksi Aksi Simpan Jadwal Pakan
         function simpanJadwal(kolamId) {
-            // Cari card kolam yang bersangkutan
             const kolamCard = document.querySelectorAll('.grid > div')[kolamId - 1];
             const pickers = kolamCard.querySelectorAll('.custom-scroll-picker');
+            const checkboxes = kolamCard.querySelectorAll('.space-y-2 input[type="checkbox"]');
             
+            let jadwalList = [];
             let jadwalText = [];
+            
             pickers.forEach((picker, index) => {
                 const selects = picker.querySelectorAll('select');
-                jadwalText.push(`Jadwal ${index+1}: ${selects[0].value}:${selects[1].value}`);
+                const time = `${selects[0].value}:${selects[1].value}`;
+                const isAktif = checkboxes[index].checked;
+                
+                jadwalList.push({ waktu: time, aktif: isAktif });
+                if (isAktif) jadwalText.push(`Jadwal ${index+1}: ${time}`);
             });
 
-            addLog(`Jadwal Pakan Kolam ${kolamId} diperbarui (${jadwalText.join(', ')})`, 'schedule');
-            alert(`Jadwal Pakan untuk Kolam ${kolamId} berhasil disimpan!`);
+            addLog(`Jadwal Pakan Kolam ${kolamId} diperbarui (${jadwalText.join(', ') || 'Semua Nonaktif'})`, 'schedule');
+            
+            // Kirim jadwal ke ESP32
+            if (mqttClient.connected) {
+                mqttClient.publish(`lega/jadwal/kolam${kolamId}`, JSON.stringify({ jadwal: jadwalList }));
+            }
+            
+            alert(`Jadwal Pakan untuk Kolam ${kolamId} berhasil disimpan dan dikirim ke perangkat!`);
         }
 
         // 4. Fungsi Otomatis Kembali OFF untuk Tombol Pakan (Delay 1 Detik)
         document.querySelectorAll('.pakan-toggle').forEach(toggle => {
             toggle.addEventListener('change', function() {
                 if (this.checked) {
+                    // Biarkan perintah 'ON' terkirim oleh event listener '.action-toggle' di atas
                     setTimeout(() => {
                         this.checked = false;
+                        
+                        // Memicu event change manual agar status 'OFF' juga terkirim ke ESP32 dan masuk log
+                        const event = new Event('change');
+                        this.dispatchEvent(event);
                     }, 1000);
                 }
             });
@@ -450,25 +547,6 @@
         }
         setInterval(updateTime, 1000);
         updateTime();
-
-        // 6. Script Koneksi MQTT 
-        const mqttClient = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
-        const statusElement = document.getElementById('cloud-status');
-
-        mqttClient.on('connect', function () {
-            console.log('Terhubung ke Cloud MQTT!');
-            statusElement.className = "px-3 py-1 rounded-full bg-green-100 text-green-700 flex items-center gap-2";
-            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> Terhubung`;
-            addLog('Terhubung secara sukses ke Cloud MQTT Broker', 'info');
-            
-            mqttClient.subscribe('lega_id/sensor/#');
-        });
-
-        mqttClient.on('error', function () {
-            statusElement.className = "px-3 py-1 rounded-full bg-red-100 text-red-600 flex items-center gap-2";
-            statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Terputus`;
-            addLog('Koneksi ke Cloud MQTT terputus atau gagal', 'error');
-        });
     </script>
 </body>
 </html>
