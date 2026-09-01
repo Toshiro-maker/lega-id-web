@@ -26,15 +26,10 @@
     </script>
     <style>
         /* Menyembunyikan scrollbar bawaan agar Scroll Picker terlihat lebih bersih */
-        select::-webkit-scrollbar {
-            display: none;
-        }
+        select::-webkit-scrollbar { display: none; }
         select {
             -ms-overflow-style: none;
             scrollbar-width: none; 
-        }
-        /* Menghilangkan tanda panah bawaan browser pada elemen select */
-        select {
             -webkit-appearance: none;
             -moz-appearance: none;
             text-indent: 1px;
@@ -65,11 +60,21 @@
             </div>
         </div>
  
-        <!-- Level Pakan Utama -->
-        <div class="bg-primary/10 rounded-xl p-4 text-center min-w-[150px]">
-            <i class="fa-solid fa-sack-xmark text-primary text-2xl mb-1"></i>
-            <div class="text-sm font-bold text-slate-600">Level Pakan</div>
-            <div class="text-2xl font-black text-primary">90%</div>
+        <!-- INDIKATOR UTAMA (BATERAI & PAKAN) -->
+        <div class="flex gap-3 justify-center">
+            <!-- Indikator Baterai -->
+            <div class="bg-emerald-500/10 rounded-xl p-4 text-center min-w-[120px]">
+                <i id="battery-icon" class="fa-solid fa-battery-full text-emerald-500 text-2xl mb-1"></i>
+                <div class="text-sm font-bold text-slate-600">Baterai</div>
+                <div id="battery-level-display" class="text-2xl font-black text-emerald-500">--%</div>
+            </div>
+
+            <!-- Level Pakan Utama -->
+            <div class="bg-primary/10 rounded-xl p-4 text-center min-w-[120px]">
+                <i class="fa-solid fa-sack-xmark text-primary text-2xl mb-1"></i>
+                <div class="text-sm font-bold text-slate-600">Level Pakan</div>
+                <div id="feed-level-display" class="text-2xl font-black text-primary">--%</div>
+            </div>
         </div>
     </header>
  
@@ -155,20 +160,19 @@
         </div>
  
         <!-- ================= KOLAM 2 ================= -->
-        <div class="bg-white rounded-2xl shadow-md p-6 border-2 border-danger/20 hover:shadow-lg transition relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-danger"></div>
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition relative overflow-hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-slate-800">Kolam 2</h2>
-                <span class="text-sm font-bold px-3 py-1 bg-red-100 text-red-700 rounded-lg animate-pulse">Kritis!</span>
+                <span class="text-sm font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-lg">Aman</span>
             </div>
             
             <div class="mb-6">
                 <div class="flex justify-between text-sm mb-1 font-semibold text-slate-600">
                     <span>Level Air</span>
-                    <span class="text-danger font-bold">20%</span>
+                    <span class="text-primary font-bold">20%</span>
                 </div>
                 <div class="w-full bg-slate-200 rounded-full h-3">
-                    <div class="bg-danger h-3 rounded-full" style="width: 20%"></div>
+                    <div class="bg-primary h-3 rounded-full" style="width: 20%"></div>
                 </div>
             </div>
  
@@ -216,7 +220,7 @@
                         <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="06:25"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
-                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 2</span>
                         <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="12:30"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
@@ -289,7 +293,7 @@
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider"><i class="fa-regular fa-calendar-check mr-1"></i> Jadwal Pakan</h3>
                 <div class="space-y-2 mb-4 text-sm">
-                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 1</span>
                         <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="06:25"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
@@ -299,7 +303,7 @@
                         <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="12:30"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
                     </div>
-                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-primary/30">
+                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                         <span>Jadwal 3</span>
                         <div class="custom-scroll-picker flex items-center justify-center border rounded bg-white w-24 h-8 cursor-pointer" data-default="17:30"></div>
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer">
@@ -329,7 +333,7 @@
  
     <!-- ================= SCRIPT LOGIKA WEB & MQTT ================= -->
     <script>
-        // 1. Script Pembangkit UI Custom Scroll Picker (ANTI AM/PM)
+        // 1. Script Pembangkit UI Custom Scroll Picker
         document.querySelectorAll('.custom-scroll-picker').forEach(container => {
             const defaultTime = container.getAttribute('data-default');
             const [defHour, defMin] = defaultTime.split(':');
@@ -391,15 +395,14 @@
             document.getElementById('log-container').innerHTML = '<div class="text-slate-500 italic">[Log dibersihkan oleh pengguna]</div>';
         }
  
-        // 3. Script Jam Utama Real-time Header
+        // 3. Script Jam Utama
         function updateTime() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
-            const timeString = `${hours}:${minutes}:${seconds}`;
             
-            document.querySelector('#clock-display span').textContent = timeString;
+            document.querySelector('#clock-display span').textContent = `${hours}:${minutes}:${seconds}`;
             
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: '2-digit' };
             document.getElementById('date-display').textContent = now.toLocaleDateString('id-ID', options);
@@ -439,7 +442,7 @@
             addLog('Koneksi ke Broker terputus!', 'error');
         });
 
-        // Publish Perintah Kontrol (Relay & Servo)
+        // Publish Kontrol Manual
         document.querySelectorAll('.action-toggle').forEach(toggle => {
             toggle.addEventListener('change', function() {
                 const kolam = parseInt(this.getAttribute('data-kolam')) - 1; 
@@ -465,14 +468,38 @@
             });
         });
 
-// Subscribe / Menerima Data Sensor & Jadwal
+        // Subscribe / Menerima Data Sensor (Termasuk Baterai)
         mqttClient.on('message', function (topic, message) {
             if (topic === 'lega_id/status') {
                 try {
                     const data = JSON.parse(message.toString());
                     
-                    const elPakanLevel = document.querySelector('.fa-sack-xmark').nextElementSibling.nextElementSibling;
-                    if(elPakanLevel) elPakanLevel.textContent = data.feed_level + '%';
+                    // --- UPDATE PAKAN & BATERAI UTAMA ---
+                    const elPakanLevel = document.getElementById('feed-level-display');
+                    if(elPakanLevel && data.feed_level !== undefined) {
+                        elPakanLevel.textContent = data.feed_level + '%';
+                    }
+
+                    const elBatteryLevel = document.getElementById('battery-level-display');
+                    if(elBatteryLevel && data.battery_level !== undefined) {
+                        elBatteryLevel.textContent = data.battery_level + '%';
+                        
+                        // Logika Animasi Ikon Baterai & Warna
+                        const batIcon = document.getElementById('battery-icon');
+                        batIcon.className = 'fa-solid text-2xl mb-1'; // reset
+                        
+                        if (data.battery_level >= 75) {
+                            batIcon.classList.add('fa-battery-full', 'text-emerald-500');
+                            elBatteryLevel.className = "text-2xl font-black text-emerald-500";
+                        } else if (data.battery_level >= 35) {
+                            batIcon.classList.add('fa-battery-half', 'text-amber-500');
+                            elBatteryLevel.className = "text-2xl font-black text-amber-500";
+                        } else {
+                            batIcon.classList.add('fa-battery-empty', 'text-danger', 'animate-pulse');
+                            elBatteryLevel.className = "text-2xl font-black text-danger animate-pulse";
+                        }
+                    }
+                    // ------------------------------------
 
                     const pondCards = document.querySelectorAll('.grid > div');
                     const pondData = [data.pond1, data.pond2, data.pond3];
@@ -484,14 +511,12 @@
 
                         const txtLevelAir = card.querySelector('.flex.justify-between.text-sm.mb-1 span:last-child');
                         const divBarAir = card.querySelector('.rounded-full > div');
-                        const statusBadge = card.querySelector('h2').nextElementSibling; // Mengambil elemen badge status
+                        const statusBadge = card.querySelector('h2').nextElementSibling;
                         
                         if(txtLevelAir && divBarAir && statusBadge) {
                             txtLevelAir.textContent = pond.level + '%';
                             divBarAir.style.width = pond.level + '%';
                             
-                            // --- LOGIKA STATUS AMAN / KRITIS ---
-                            // Anggap Kritis jika level air <= 30%. Kamu bisa ubah angkanya sesuai kebutuhan.
                             if (pond.level <= 30) {
                                 statusBadge.textContent = "Kritis!";
                                 statusBadge.className = "text-sm font-bold px-3 py-1 bg-red-100 text-red-700 rounded-lg animate-pulse";
@@ -516,7 +541,7 @@
                     console.error("Gagal parsing JSON MQTT: ", e);
                 }
             }
-                       
+                        
             if (topic === 'lega_id/jadwal_sync') {
                 try {
                     const data = JSON.parse(message.toString());
