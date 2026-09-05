@@ -160,7 +160,7 @@
         </div>
  
         <!-- ================= KOLAM 2 ================= -->
-        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition">
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition relative overflow-hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-slate-800">Kolam 2</h2>
                 <span class="text-sm font-bold px-3 py-1 bg-slate-100 text-slate-700 rounded-lg status-badge">Menunggu</span>
@@ -367,7 +367,6 @@
  
         // 2. Fungsi Log Activity & Local Storage (MEMORI LOG)
         document.addEventListener("DOMContentLoaded", () => {
-            // Memuat log yang tersimpan saat halaman dibuka
             const savedLogs = localStorage.getItem("lega_logs");
             if (savedLogs) {
                 document.getElementById('log-container').innerHTML = savedLogs;
@@ -398,12 +397,10 @@
             
             logContainer.prepend(logItem); 
             
-            // Batasi maksimal 50 log agar browser tidak lemot
             if (logContainer.children.length > 50) {
                 logContainer.lastElementChild.remove();
             }
 
-            // Simpan ke memory browser (localStorage)
             localStorage.setItem("lega_logs", logContainer.innerHTML);
         }
  
@@ -486,7 +483,7 @@
             });
         });
 
-        // Subscribe / Menerima Data Sensor (Termasuk Baterai)
+        // Subscribe / Menerima Data Sensor
         mqttClient.on('message', function (topic, message) {
             if (topic === 'lega_id/status') {
                 try {
@@ -502,7 +499,6 @@
                     if(elBatteryLevel && data.battery_level !== undefined) {
                         elBatteryLevel.textContent = data.battery_level + '%';
                         
-                        // Logika Animasi Ikon Baterai & Warna
                         const batIcon = document.getElementById('battery-icon');
                         batIcon.className = 'fa-solid text-2xl mb-1'; // reset
                         
@@ -548,7 +544,6 @@
                             }
                         }
 
-                        // Mengupdate toggle manual berdasarkan relayState (true/false) dari Arduino
                         const inputs = card.querySelectorAll('input.action-toggle');
                         if(inputs.length >= 3) {
                             if (inputs[0].checked !== pond.in) inputs[0].checked = pond.in;
