@@ -457,7 +457,7 @@
             addLog('Koneksi ke Broker terputus!', 'error');
         });
 
-// Publish Kontrol Manual
+        // Publish Kontrol Manual (Dengan Fitur Anti Rubber-Banding)
         document.querySelectorAll('.action-toggle').forEach(toggle => {
             // Inisialisasi status awal
             toggle.dataset.locked = "false";
@@ -578,7 +578,44 @@
                 } catch (e) {
                     console.error("Gagal parsing JSON MQTT: ", e);
                 }
-            }        // 5. Fungsi Menyimpan Jadwal
+            }
+                        
+            if (topic === 'lega_id/jadwal_sync') {
+                try {
+                    const data = JSON.parse(message.toString());
+                    if (data.type === "jadwal_sync") {
+                        const pondCards = document.querySelectorAll('.grid > div');
+                        
+                        data.ponds.forEach((jadwalKolam, indexKolam) => {
+                            const card = pondCards[indexKolam];
+                            if (!card) return;
+                            
+                            const pickers = card.querySelectorAll('.custom-scroll-picker');
+                            
+                            jadwalKolam.forEach((jam, idxJadwal) => {
+                                const picker = pickers[idxJadwal];
+                                const checkbox = picker.nextElementSibling;
+                                const selects = picker.querySelectorAll('select');
+                                
+                                if (jam === "--:--") {
+                                    checkbox.checked = false;
+                                } else {
+                                    checkbox.checked = true;
+                                    const [h, m] = jam.split(':');
+                                    selects[0].value = h;
+                                    selects[1].value = m;
+                                }
+                            });
+                        });
+                        addLog('Sinkronisasi memori Jadwal dari ESP32 berhasil dimuat.', 'schedule');
+                    }
+                } catch (e) {
+                    console.error("Gagal sinkron jadwal: ", e);
+                }
+            }
+        });
+
+        // 5. Fungsi Menyimpan Jadwal
         function simpanJadwal(kolamId) {
             const indexKolam = kolamId - 1; 
             const kolamCard = document.querySelectorAll('.grid > div')[indexKolam];
