@@ -64,16 +64,16 @@
         <div class="flex gap-3 justify-center">
             <!-- Indikator Baterai -->
             <div class="bg-emerald-500/10 rounded-xl p-4 text-center min-w-[120px]">
-                <i id="battery-icon" class="fa-solid fa-battery-full text-emerald-500 text-2xl mb-1"></i>
+                <i id="battery-icon" class="fa-solid fa-battery-empty text-danger text-2xl mb-1"></i>
                 <div class="text-sm font-bold text-slate-600">Baterai</div>
-                <div id="battery-level-display" class="text-2xl font-black text-emerald-500">--%</div>
+                <div id="battery-level-display" class="text-2xl font-black text-danger">0%</div>
             </div>
 
             <!-- Level Pakan Utama -->
             <div class="bg-primary/10 rounded-xl p-4 text-center min-w-[120px]">
                 <i class="fa-solid fa-sack-xmark text-primary text-2xl mb-1"></i>
                 <div class="text-sm font-bold text-slate-600">Level Pakan</div>
-                <div id="feed-level-display" class="text-2xl font-black text-primary">--%</div>
+                <div id="feed-level-display" class="text-2xl font-black text-primary">0%</div>
             </div>
         </div>
     </header>
@@ -85,16 +85,16 @@
         <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-slate-800">Kolam 1</h2>
-                <span class="text-sm font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-lg">Aman</span>
+                <span class="text-sm font-bold px-3 py-1 bg-slate-100 text-slate-700 rounded-lg status-badge">Menunggu</span>
             </div>
             
             <div class="mb-6">
                 <div class="flex justify-between text-sm mb-1 font-semibold text-slate-600">
                     <span>Level Air</span>
-                    <span class="text-primary">70%</span>
+                    <span class="text-primary level-text">0%</span>
                 </div>
                 <div class="w-full bg-slate-200 rounded-full h-3">
-                    <div class="bg-primary h-3 rounded-full" style="width: 70%"></div>
+                    <div class="bg-primary h-3 rounded-full level-bar" style="width: 0%"></div>
                 </div>
             </div>
  
@@ -160,19 +160,19 @@
         </div>
  
         <!-- ================= KOLAM 2 ================= -->
-        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition relative overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-slate-800">Kolam 2</h2>
-                <span class="text-sm font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-lg">Aman</span>
+                <span class="text-sm font-bold px-3 py-1 bg-slate-100 text-slate-700 rounded-lg status-badge">Menunggu</span>
             </div>
             
             <div class="mb-6">
                 <div class="flex justify-between text-sm mb-1 font-semibold text-slate-600">
                     <span>Level Air</span>
-                    <span class="text-primary font-bold">20%</span>
+                    <span class="text-primary level-text">0%</span>
                 </div>
                 <div class="w-full bg-slate-200 rounded-full h-3">
-                    <div class="bg-primary h-3 rounded-full" style="width: 20%"></div>
+                    <div class="bg-primary h-3 rounded-full level-bar" style="width: 0%"></div>
                 </div>
             </div>
  
@@ -241,16 +241,16 @@
         <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-slate-800">Kolam 3</h2>
-                <span class="text-sm font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-lg">Aman</span>
+                <span class="text-sm font-bold px-3 py-1 bg-slate-100 text-slate-700 rounded-lg status-badge">Menunggu</span>
             </div>
             
             <div class="mb-6">
                 <div class="flex justify-between text-sm mb-1 font-semibold text-slate-600">
                     <span>Level Air</span>
-                    <span class="text-primary">70%</span>
+                    <span class="text-primary level-text">0%</span>
                 </div>
                 <div class="w-full bg-slate-200 rounded-full h-3">
-                    <div class="bg-primary h-3 rounded-full" style="width: 70%"></div>
+                    <div class="bg-primary h-3 rounded-full level-bar" style="width: 0%"></div>
                 </div>
             </div>
  
@@ -365,7 +365,15 @@
             container.appendChild(selMin);
         });
  
-        // 2. Fungsi Log Activity
+        // 2. Fungsi Log Activity & Local Storage (MEMORI LOG)
+        document.addEventListener("DOMContentLoaded", () => {
+            // Memuat log yang tersimpan saat halaman dibuka
+            const savedLogs = localStorage.getItem("lega_logs");
+            if (savedLogs) {
+                document.getElementById('log-container').innerHTML = savedLogs;
+            }
+        });
+
         function getCurrentTimeStamp() {
             const now = new Date();
             const h = String(now.getHours()).padStart(2, '0');
@@ -389,10 +397,20 @@
             logItem.innerHTML = `<span class="text-slate-500">[${timeStamp}]</span> <span class="${colorClass}">${message}</span>`;
             
             logContainer.prepend(logItem); 
+            
+            // Batasi maksimal 50 log agar browser tidak lemot
+            if (logContainer.children.length > 50) {
+                logContainer.lastElementChild.remove();
+            }
+
+            // Simpan ke memory browser (localStorage)
+            localStorage.setItem("lega_logs", logContainer.innerHTML);
         }
  
         function clearLogs() {
-            document.getElementById('log-container').innerHTML = '<div class="text-slate-500 italic">[Log dibersihkan oleh pengguna]</div>';
+            const logContainer = document.getElementById('log-container');
+            logContainer.innerHTML = '<div class="text-slate-500 italic">[Log dibersihkan oleh pengguna]</div>';
+            localStorage.setItem("lega_logs", logContainer.innerHTML);
         }
  
         // 3. Script Jam Utama
@@ -509,9 +527,9 @@
                         const card = pondCards[index];
                         if (!card) return;
 
-                        const txtLevelAir = card.querySelector('.flex.justify-between.text-sm.mb-1 span:last-child');
-                        const divBarAir = card.querySelector('.rounded-full > div');
-                        const statusBadge = card.querySelector('h2').nextElementSibling;
+                        const txtLevelAir = card.querySelector('.level-text');
+                        const divBarAir = card.querySelector('.level-bar');
+                        const statusBadge = card.querySelector('.status-badge');
                         
                         if(txtLevelAir && divBarAir && statusBadge) {
                             txtLevelAir.textContent = pond.level + '%';
@@ -519,17 +537,18 @@
                             
                             if (pond.level <= 30) {
                                 statusBadge.textContent = "Kritis!";
-                                statusBadge.className = "text-sm font-bold px-3 py-1 bg-red-100 text-red-700 rounded-lg animate-pulse";
-                                txtLevelAir.className = "text-danger font-bold";
-                                divBarAir.className = "bg-danger h-3 rounded-full";
+                                statusBadge.className = "text-sm font-bold px-3 py-1 bg-red-100 text-red-700 rounded-lg animate-pulse status-badge";
+                                txtLevelAir.className = "text-danger font-bold level-text";
+                                divBarAir.className = "bg-danger h-3 rounded-full level-bar";
                             } else {
                                 statusBadge.textContent = "Aman";
-                                statusBadge.className = "text-sm font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-lg";
-                                txtLevelAir.className = "text-primary";
-                                divBarAir.className = "bg-primary h-3 rounded-full transition-all duration-500";
+                                statusBadge.className = "text-sm font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-lg status-badge";
+                                txtLevelAir.className = "text-primary level-text";
+                                divBarAir.className = "bg-primary h-3 rounded-full transition-all duration-500 level-bar";
                             }
                         }
 
+                        // Mengupdate toggle manual berdasarkan relayState (true/false) dari Arduino
                         const inputs = card.querySelectorAll('input.action-toggle');
                         if(inputs.length >= 3) {
                             if (inputs[0].checked !== pond.in) inputs[0].checked = pond.in;
