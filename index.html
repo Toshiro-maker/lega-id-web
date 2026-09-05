@@ -49,7 +49,7 @@
             </div>
         </div>
  
-<!-- Judul & Status Cloud -->
+        <!-- Judul & Status Cloud -->
         <div class="text-center flex flex-col items-center">
             <!-- Logo Jejer 6 -->
             <img src="LOGO.png" alt="Logo Sponsor" class="h-10 md:h-14 mb-3 object-contain">
@@ -368,13 +368,59 @@
             container.appendChild(selMin);
         });
  
-        // 2. Fungsi Log Activity & Local Storage (MEMORI LOG)
-        document.addEventListener("DOMContentLoaded", () => {
-            const savedLogs = localStorage.getItem("lega_logs");
-            if (savedLogs) {
-                document.getElementById('log-container').innerHTML = savedLogs;
+        // 2. Fungsi Log Activity (Otomatis Hapus 24 Jam & Stabil dengan JSON)
+        let logData = [];
+        const LOG_KEY = "lega_logs_data";
+        const TIME_KEY = "lega_logs_timestamp";
+        
+        function initLogs() {
+            // Ambil data log dari memori
+            const savedLogs = localStorage.getItem(LOG_KEY);
+            let savedTime = localStorage.getItem(TIME_KEY);
+            const now = Date.now();
+
+            // Cek apakah log sudah berusia lebih dari 24 jam (86.400.000 milidetik)
+            if (!savedTime || (now - parseInt(savedTime) > 86400000)) {
+                // Jika lebih dari 24 jam, reset log
+                logData = [];
+                localStorage.setItem(TIME_KEY, now.toString());
+                localStorage.setItem(LOG_KEY, JSON.stringify(logData));
+                addLog('Sistem mereset log otomatis (Siklus 24 Jam).', 'info');
+            } else {
+                // Jika masih dalam 24 jam, muat log lama
+                if (savedLogs) {
+                    try {
+                        logData = JSON.parse(savedLogs);
+                    } catch (e) {
+                        logData = [];
+                    }
+                }
             }
-        });
+            renderLogs();
+        }
+
+        function renderLogs() {
+            const logContainer = document.getElementById('log-container');
+            logContainer.innerHTML = ''; // Bersihkan container
+
+            if (logData.length === 0) {
+                logContainer.innerHTML = '<div class="text-slate-500 italic">[Sistem siap merekam aktivitas kontrol manual dan jadwal...]</div>';
+                return;
+            }
+
+            // Tampilkan semua log dari memori
+            logData.forEach(log => {
+                const logItem = document.createElement('div');
+                let colorClass = 'text-green-400'; // Default (info)
+                if (log.type === 'action') colorClass = 'text-sky-400';
+                if (log.type === 'schedule') colorClass = 'text-amber-400';
+                if (log.type === 'error') colorClass = 'text-red-400';
+
+                logItem.className = `flex items-center gap-2 border-b border-slate-800 pb-1`;
+                logItem.innerHTML = `<span class="text-slate-500">[${log.time}]</span> <span class="${colorClass}">${log.message}</span>`;
+                logContainer.appendChild(logItem);
+            });
+        }
 
         function getCurrentTimeStamp() {
             const now = new Date();
@@ -385,33 +431,31 @@
         }
  
         function addLog(message, type = 'info') {
-            const logContainer = document.getElementById('log-container');
-            if (logContainer.querySelector('.italic')) logContainer.innerHTML = '';
- 
             const timeStamp = getCurrentTimeStamp();
-            const logItem = document.createElement('div');
             
-            let colorClass = 'text-green-400';
-            if (type === 'action') colorClass = 'text-sky-400';
-            if (type === 'schedule') colorClass = 'text-amber-400';
- 
-            logItem.className = `flex items-center gap-2 border-b border-slate-800 pb-1`;
-            logItem.innerHTML = `<span class="text-slate-500">[${timeStamp}]</span> <span class="${colorClass}">${message}</span>`;
+            // Tambahkan log baru ke urutan paling atas (unshift)
+            logData.unshift({ time: timeStamp, message: message, type: type });
             
-            logContainer.prepend(logItem); 
-            
-            if (logContainer.children.length > 50) {
-                logContainer.lastElementChild.remove();
+            // Batasi maksimal 50 baris agar browser tidak berat
+            if (logData.length > 50) {
+                logData.pop();
             }
 
-            localStorage.setItem("lega_logs", logContainer.innerHTML);
+            // Simpan ke memori dan render ulang UI
+            localStorage.setItem(LOG_KEY, JSON.stringify(logData));
+            renderLogs();
         }
  
         function clearLogs() {
-            const logContainer = document.getElementById('log-container');
-            logContainer.innerHTML = '<div class="text-slate-500 italic">[Log dibersihkan oleh pengguna]</div>';
-            localStorage.setItem("lega_logs", logContainer.innerHTML);
+            logData = [];
+            localStorage.setItem(LOG_KEY, JSON.stringify(logData));
+            localStorage.setItem(TIME_KEY, Date.now().toString());
+            renderLogs();
+            addLog('Log dibersihkan oleh pengguna secara manual', 'info');
         }
+
+        // Jalankan inisialisasi saat web pertama dimuat
+        document.addEventListener("DOMContentLoaded", initLogs);
  
         // 3. Script Jam Utama
         function updateTime() {
