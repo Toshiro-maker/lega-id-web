@@ -457,12 +457,22 @@
             addLog('Koneksi ke Broker terputus!', 'error');
         });
 
-        // Publish Kontrol Manual
+// Publish Kontrol Manual
         document.querySelectorAll('.action-toggle').forEach(toggle => {
+            // Inisialisasi status awal
+            toggle.dataset.locked = "false";
+
             toggle.addEventListener('change', function() {
                 const kolam = parseInt(this.getAttribute('data-kolam')) - 1; 
                 const action = this.getAttribute('data-action');
                 const state = this.checked;
+                
+                // 1. KUNCI TOMBOL SEMENTARA (Mencegah animasi on-off 2 kali / ditimpa MQTT)
+                this.dataset.locked = "true";
+                if (this.lockTimeout) clearTimeout(this.lockTimeout); // Reset timer jika dipencet cepat
+                this.lockTimeout = setTimeout(() => {
+                    this.dataset.locked = "false";
+                }, 2500); // Kunci dari update MQTT selama 2.5 detik
                 
                 let payload = {};
 
@@ -472,7 +482,13 @@
                     payload = { cmd: "relay", ch: (kolam * 2) + 1, state: state };
                 } else if (action.includes("Pakan")) {
                     payload = { cmd: "servo", pond: kolam, state: state };
-                    if (state) setTimeout(() => { this.checked = false; }, 1000);
+                    
+                    // Logika Pakan (Mati otomatis di UI setelah 1 detik)
+                    if (state) {
+                        setTimeout(() => { 
+                            this.checked = false; 
+                        }, 1000);
+                    }
                 }
 
                 if (mqttClient.connected) {
@@ -544,54 +560,25 @@
                             }
                         }
 
+                        // 2. CEK STATUS LOCK SEBELUM MENIMPA ANIMASI
                         const inputs = card.querySelectorAll('input.action-toggle');
                         if(inputs.length >= 3) {
-                            if (inputs[0].checked !== pond.in) inputs[0].checked = pond.in;
-                            if (inputs[1].checked !== pond.out) inputs[1].checked = pond.out;
-                            if (inputs[2].checked !== pond.feed) inputs[2].checked = pond.feed;
+                            // Hanya update animasi dari Cloud JIKA tombol tidak sedang dikunci (ditekan manual)
+                            if (inputs[0].dataset.locked !== "true" && inputs[0].checked !== pond.in) {
+                                inputs[0].checked = pond.in;
+                            }
+                            if (inputs[1].dataset.locked !== "true" && inputs[1].checked !== pond.out) {
+                                inputs[1].checked = pond.out;
+                            }
+                            if (inputs[2].dataset.locked !== "true" && inputs[2].checked !== pond.feed) {
+                                inputs[2].checked = pond.feed;
+                            }
                         }
                     });
                 } catch (e) {
                     console.error("Gagal parsing JSON MQTT: ", e);
                 }
-            }
-                        
-            if (topic === 'lega_id/jadwal_sync') {
-                try {
-                    const data = JSON.parse(message.toString());
-                    if (data.type === "jadwal_sync") {
-                        const pondCards = document.querySelectorAll('.grid > div');
-                        
-                        data.ponds.forEach((jadwalKolam, indexKolam) => {
-                            const card = pondCards[indexKolam];
-                            if (!card) return;
-                            
-                            const pickers = card.querySelectorAll('.custom-scroll-picker');
-                            
-                            jadwalKolam.forEach((jam, idxJadwal) => {
-                                const picker = pickers[idxJadwal];
-                                const checkbox = picker.nextElementSibling;
-                                const selects = picker.querySelectorAll('select');
-                                
-                                if (jam === "--:--") {
-                                    checkbox.checked = false;
-                                } else {
-                                    checkbox.checked = true;
-                                    const [h, m] = jam.split(':');
-                                    selects[0].value = h;
-                                    selects[1].value = m;
-                                }
-                            });
-                        });
-                        addLog('Sinkronisasi memori Jadwal dari ESP32 berhasil dimuat.', 'schedule');
-                    }
-                } catch (e) {
-                    console.error("Gagal sinkron jadwal: ", e);
-                }
-            }
-        });
-
-        // 5. Fungsi Menyimpan Jadwal
+            }        // 5. Fungsi Menyimpan Jadwal
         function simpanJadwal(kolamId) {
             const indexKolam = kolamId - 1; 
             const kolamCard = document.querySelectorAll('.grid > div')[indexKolam];
