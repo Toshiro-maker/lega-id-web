@@ -368,26 +368,23 @@
             container.appendChild(selMin);
         });
  
-        // 2. Fungsi Log Activity (Otomatis Hapus 24 Jam & Stabil dengan JSON)
+        // 2. Fungsi Log Activity (Sinkron antar Device via MQTT & Auto-Clear 24 Jam)
         let logData = [];
         const LOG_KEY = "lega_logs_data";
         const TIME_KEY = "lega_logs_timestamp";
         
         function initLogs() {
-            // Ambil data log dari memori
             const savedLogs = localStorage.getItem(LOG_KEY);
             let savedTime = localStorage.getItem(TIME_KEY);
             const now = Date.now();
 
-            // Cek apakah log sudah berusia lebih dari 24 jam (86.400.000 milidetik)
+            // Cek siklus 24 jam (86.400.000 ms)
             if (!savedTime || (now - parseInt(savedTime) > 86400000)) {
-                // Jika lebih dari 24 jam, reset log
                 logData = [];
                 localStorage.setItem(TIME_KEY, now.toString());
                 localStorage.setItem(LOG_KEY, JSON.stringify(logData));
-                addLog('Sistem mereset log otomatis (Siklus 24 Jam).', 'info');
+                appendLocalLog('Sistem mereset log otomatis (Siklus 24 Jam).', 'info');
             } else {
-                // Jika masih dalam 24 jam, muat log lama
                 if (savedLogs) {
                     try {
                         logData = JSON.parse(savedLogs);
@@ -401,17 +398,16 @@
 
         function renderLogs() {
             const logContainer = document.getElementById('log-container');
-            logContainer.innerHTML = ''; // Bersihkan container
+            logContainer.innerHTML = ''; 
 
             if (logData.length === 0) {
                 logContainer.innerHTML = '<div class="text-slate-500 italic">[Sistem siap merekam aktivitas kontrol manual dan jadwal...]</div>';
                 return;
             }
 
-            // Tampilkan semua log dari memori
             logData.forEach(log => {
                 const logItem = document.createElement('div');
-                let colorClass = 'text-green-400'; // Default (info)
+                let colorClass = 'text-green-400'; 
                 if (log.type === 'action') colorClass = 'text-sky-400';
                 if (log.type === 'schedule') colorClass = 'text-amber-400';
                 if (log.type === 'error') colorClass = 'text-red-400';
@@ -430,18 +426,31 @@
             return `${h}:${m}:${s}`;
         }
  
+        // Fungsi untuk mencatat dan mempublikasikan log ke MQTT agar tampil di semua device
         function addLog(message, type = 'info') {
             const timeStamp = getCurrentTimeStamp();
-            
-            // Tambahkan log baru ke urutan paling atas (unshift)
-            logData.unshift({ time: timeStamp, message: message, type: type });
-            
-            // Batasi maksimal 50 baris agar browser tidak berat
+            const logObj = { time: timeStamp, message: message, type: type };
+
+            // Kirim log via MQTT agar diterima device lain
+            if (typeof mqttClient !== 'undefined' && mqttClient.connected) {
+                mqttClient.publish('lega_id/logs', JSON.stringify(logObj));
+            } else {
+                // Jika MQTT belum terhubung, masukkan lokal dulu
+                appendLogData(logObj);
+            }
+        }
+
+        // Fungsi khusus untuk memasukkan data log ke memori lokal tanpa publish ulang
+        function appendLocalLog(message, type = 'info') {
+            const timeStamp = getCurrentTimeStamp();
+            appendLogData({ time: timeStamp, message: message, type: type });
+        }
+
+        function appendLogData(logObj) {
+            logData.unshift(logObj);
             if (logData.length > 50) {
                 logData.pop();
             }
-
-            // Simpan ke memori dan render ulang UI
             localStorage.setItem(LOG_KEY, JSON.stringify(logData));
             renderLogs();
         }
@@ -451,10 +460,9 @@
             localStorage.setItem(LOG_KEY, JSON.stringify(logData));
             localStorage.setItem(TIME_KEY, Date.now().toString());
             renderLogs();
-            addLog('Log dibersihkan oleh pengguna secara manual', 'info');
+            appendLocalLog('Log dibersihkan oleh pengguna secara manual', 'info');
         }
 
-        // Jalankan inisialisasi saat web pertama dimuat
         document.addEventListener("DOMContentLoaded", initLogs);
  
         // 3. Script Jam Utama
@@ -494,6 +502,7 @@
             
             mqttClient.subscribe('lega_id/status');
             mqttClient.subscribe('lega_id/jadwal_sync'); 
+            mqttClient.subscribe('lega_id/logs'); // Subscribe topik log bersama
             
             mqttClient.publish('lega_id/cmd', JSON.stringify({ cmd: "get_jadwal" }));
         });
@@ -501,12 +510,11 @@
         mqttClient.on('error', function () {
             statusElement.className = "px-3 py-1 rounded-full bg-red-100 text-red-600 flex items-center gap-2";
             statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Terputus`;
-            addLog('Koneksi ke Broker terputus!', 'error');
+            appendLocalLog('Koneksi ke Broker terputus!', 'error');
         });
 
         // Publish Kontrol Manual (Dengan Fitur Anti Rubber-Banding)
         document.querySelectorAll('.action-toggle').forEach(toggle => {
-            // Inisialisasi status awal
             toggle.dataset.locked = "false";
 
             toggle.addEventListener('change', function() {
@@ -514,12 +522,11 @@
                 const action = this.getAttribute('data-action');
                 const state = this.checked;
                 
-                // 1. KUNCI TOMBOL SEMENTARA (Mencegah animasi on-off 2 kali / ditimpa MQTT)
                 this.dataset.locked = "true";
-                if (this.lockTimeout) clearTimeout(this.lockTimeout); // Reset timer jika dipencet cepat
+                if (this.lockTimeout) clearTimeout(this.lockTimeout); 
                 this.lockTimeout = setTimeout(() => {
                     this.dataset.locked = "false";
-                }, 2500); // Kunci dari update MQTT selama 2.5 detik
+                }, 2500); 
                 
                 let payload = {};
 
@@ -530,7 +537,6 @@
                 } else if (action.includes("Pakan")) {
                     payload = { cmd: "servo", pond: kolam, state: state };
                     
-                    // Logika Pakan (Mati otomatis di UI setelah 1 detik)
                     if (state) {
                         setTimeout(() => { 
                             this.checked = false; 
@@ -546,8 +552,21 @@
             });
         });
 
-        // Subscribe / Menerima Data Sensor
+        // Subscribe / Menerima Data Sensor & Log Bersama
         mqttClient.on('message', function (topic, message) {
+            // Menerima Log dari Device Lain
+            if (topic === 'lega_id/logs') {
+                try {
+                    const logObj = JSON.parse(message.toString());
+                    // Cek agar log yang sama persis tidak masuk berulang kali dari device sendiri
+                    if (logData.length === 0 || logData[0].time !== logObj.time || logData[0].message !== logObj.message) {
+                        appendLogData(logObj);
+                    }
+                } catch (e) {
+                    console.error("Gagal parsing log MQTT: ", e);
+                }
+            }
+
             if (topic === 'lega_id/status') {
                 try {
                     const data = JSON.parse(message.toString());
@@ -607,10 +626,8 @@
                             }
                         }
 
-                        // 2. CEK STATUS LOCK SEBELUM MENIMPA ANIMASI
                         const inputs = card.querySelectorAll('input.action-toggle');
                         if(inputs.length >= 3) {
-                            // Hanya update animasi dari Cloud JIKA tombol tidak sedang dikunci (ditekan manual)
                             if (inputs[0].dataset.locked !== "true" && inputs[0].checked !== pond.in) {
                                 inputs[0].checked = pond.in;
                             }
