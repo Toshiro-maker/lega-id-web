@@ -60,12 +60,15 @@
             </div>
         </div>
 
-        <!-- INDIKATOR UTAMA (HANYA BATERAI ALAT) -->
+        <!-- INDIKATOR UTAMA (BATERAI ALAT & TEGANGAN) -->
         <div class="flex gap-3 justify-center">
-            <div class="bg-emerald-500/10 rounded-xl p-4 text-center min-w-[140px]">
+            <div class="bg-emerald-500/10 rounded-xl p-4 text-center min-w-[170px]">
                 <i id="battery-icon" class="fa-solid fa-battery-empty text-danger text-2xl mb-1"></i>
                 <div class="text-sm font-bold text-slate-600">Baterai Alat</div>
-                <div id="battery-level-display" class="text-2xl font-black text-danger">0%</div>
+                <div class="flex items-baseline justify-center gap-1.5 mt-0.5">
+                    <span id="battery-level-display" class="text-2xl font-black text-danger">0%</span>
+                    <span id="battery-volt-display" class="text-sm font-bold text-slate-500">(--.-V)</span>
+                </div>
             </div>
         </div>
     </header>
@@ -145,9 +148,14 @@
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer schedule-check">
                     </div>
                 </div>
-                <button onclick="simpanJadwal(1)" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-floppy-disk"></i> Simpan Jadwal
-                </button>
+                <div class="flex gap-2">
+                    <button onclick="simpanJadwal(1)" class="flex-1 bg-primary hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm shadow-sm">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan
+                    </button>
+                    <button onclick="resetJadwal(1)" class="bg-slate-200 hover:bg-red-100 text-slate-700 hover:text-red-600 font-bold py-2 px-3 rounded-lg transition-colors flex items-center justify-center gap-1.5 text-sm" title="Matikan & Reset Semua Jadwal Kolam 1">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -223,9 +231,14 @@
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer schedule-check">
                     </div>
                 </div>
-                <button onclick="simpanJadwal(2)" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-floppy-disk"></i> Simpan Jadwal
-                </button>
+                <div class="flex gap-2">
+                    <button onclick="simpanJadwal(2)" class="flex-1 bg-primary hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm shadow-sm">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan
+                    </button>
+                    <button onclick="resetJadwal(2)" class="bg-slate-200 hover:bg-red-100 text-slate-700 hover:text-red-600 font-bold py-2 px-3 rounded-lg transition-colors flex items-center justify-center gap-1.5 text-sm" title="Matikan & Reset Semua Jadwal Kolam 2">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -301,9 +314,14 @@
                         <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer schedule-check">
                     </div>
                 </div>
-                <button onclick="simpanJadwal(3)" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-floppy-disk"></i> Simpan Jadwal
-                </button>
+                <div class="flex gap-2">
+                    <button onclick="simpanJadwal(3)" class="flex-1 bg-primary hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm shadow-sm">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan
+                    </button>
+                    <button onclick="resetJadwal(3)" class="bg-slate-200 hover:bg-red-100 text-slate-700 hover:text-red-600 font-bold py-2 px-3 rounded-lg transition-colors flex items-center justify-center gap-1.5 text-sm" title="Matikan & Reset Semua Jadwal Kolam 3">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -312,13 +330,13 @@
     <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                <i class="fa-solid fa-clock-rotate-left text-primary"></i> Live Activity Log (Semua Perangkat)
+                <i class="fa-solid fa-clock-rotate-left text-primary"></i> Live Activity Log
             </h2>
             <button onclick="clearLogs()" class="text-xs bg-slate-200 hover:bg-red-100 hover:text-red-600 font-semibold px-3 py-1.5 rounded-lg transition-colors">
                 <i class="fa-solid fa-trash-can mr-1"></i> Bersihkan Log
             </button>
         </div>
-        <div id="log-container" class="bg-slate-900 text-slate-200 font-mono text-xs p-4 rounded-xl h-44 overflow-y-auto space-y-2">
+        <div id="log-container" class="bg-slate-900 text-slate-200 font-mono text-xs p-4 rounded-xl h-48 overflow-y-auto space-y-2">
             <div class="text-slate-500 italic">[Sistem siap merekam aktivitas realtime...]</div>
         </div>
     </section>
@@ -357,7 +375,7 @@
             container.appendChild(selMin);
         });
 
-        // 2. Jam Dashboard
+        // 2. Jam Dashboard Realtime
         function updateTime() {
             const now = new Date();
             const h = String(now.getHours()).padStart(2, '0');
@@ -371,25 +389,9 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // 3. Manajemen Activity Log Global
+        // 3. Manajemen Log Sinkron Multi-Device
         let logData = [];
         const LOG_KEY = "lega_logs_data";
-        const TIME_KEY = "lega_logs_timestamp";
-
-        function initLogs() {
-            const savedLogs = localStorage.getItem(LOG_KEY);
-            let savedTime = localStorage.getItem(TIME_KEY);
-            const now = Date.now();
-
-            if (!savedTime || (now - parseInt(savedTime) > 86400000)) {
-                logData = [];
-                localStorage.setItem(TIME_KEY, now.toString());
-                localStorage.setItem(LOG_KEY, JSON.stringify(logData));
-            } else if (savedLogs) {
-                try { logData = JSON.parse(savedLogs); } catch(e) { logData = []; }
-            }
-            renderLogs();
-        }
 
         function renderLogs() {
             const container = document.getElementById('log-container');
@@ -420,7 +422,7 @@
 
         function appendLogData(obj) {
             logData.unshift(obj);
-            if (logData.length > 60) logData.pop();
+            if (logData.length > 50) logData.pop();
             localStorage.setItem(LOG_KEY, JSON.stringify(logData));
             renderLogs();
         }
@@ -430,19 +432,35 @@
             const logObj = { time, message, type };
             if (mqttClient && mqttClient.connected) {
                 mqttClient.publish('lega_id/logs', JSON.stringify(logObj));
+                // Update retained sync snapshot log
+                setTimeout(() => {
+                    mqttClient.publish('lega_id/logs_sync', JSON.stringify(logData), { retain: true });
+                }, 100);
             } else {
                 appendLogData(logObj);
             }
         }
 
+        // Hapus log di SEMUA browser / perangkat sekaligus
         function clearLogs() {
-            logData = [];
-            localStorage.setItem(LOG_KEY, JSON.stringify(logData));
-            localStorage.setItem(TIME_KEY, Date.now().toString());
-            renderLogs();
+            if (confirm("Yakin ingin menghapus seluruh riwayat log di semua perangkat?")) {
+                logData = [];
+                localStorage.removeItem(LOG_KEY);
+                renderLogs();
+                if (mqttClient && mqttClient.connected) {
+                    // Kirim sinyal hapus ke semua device dan kosongkan retained snapshot
+                    mqttClient.publish('lega_id/logs', JSON.stringify({ type: "clear" }));
+                    mqttClient.publish('lega_id/logs_sync', JSON.stringify([]), { retain: true });
+                }
+            }
         }
 
-        document.addEventListener("DOMContentLoaded", initLogs);
+        // Inisialisasi awal log lokal
+        const savedLocal = localStorage.getItem(LOG_KEY);
+        if (savedLocal) {
+            try { logData = JSON.parse(savedLocal); } catch(e) { logData = []; }
+            renderLogs();
+        }
 
         // 4. Koneksi MQTT
         const mqttOptions = {
@@ -464,8 +482,9 @@
             mqttClient.subscribe('lega_id/status');
             mqttClient.subscribe('lega_id/jadwal_sync');
             mqttClient.subscribe('lega_id/logs');
+            mqttClient.subscribe('lega_id/logs_sync');
 
-            // Minta jadwal tersimpan dari ESP32 saat pertama connect
+            // Minta jadwal tersimpan dari ESP32 saat pertama connect / reload
             mqttClient.publish('lega_id/cmd', JSON.stringify({ cmd: "get_jadwal" }));
         });
 
@@ -479,7 +498,7 @@
             statusElement.innerHTML = `<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> Terputus`;
         });
 
-        // 5. Kontrol Manual Toggle
+        // 5. Kontrol Manual Toggle (Relay & Servo)
         document.querySelectorAll('.action-toggle').forEach(toggle => {
             toggle.dataset.locked = "false";
 
@@ -514,7 +533,7 @@
             });
         });
 
-        // 6. Menyimpan Jadwal Pakan
+        // 6. Menyimpan & Mereset Jadwal Pakan
         function simpanJadwal(kolamId) {
             const indexKolam = kolamId - 1;
             const kolamCard = document.querySelectorAll('.grid > div')[indexKolam];
@@ -551,16 +570,57 @@
             }
         }
 
+        // Fungsi Reset Semua Jadwal Pada Suatu Kolam
+        function resetJadwal(kolamId) {
+            const indexKolam = kolamId - 1;
+            const kolamCard = document.querySelectorAll('.grid > div')[indexKolam];
+            const checkboxes = kolamCard.querySelectorAll('.schedule-check');
+
+            checkboxes.forEach(cb => cb.checked = false);
+
+            const payload = {
+                cmd: "jadwal",
+                pond: indexKolam,
+                times: ["--:--", "--:--", "--:--"]
+            };
+
+            if (mqttClient && mqttClient.connected) {
+                mqttClient.publish('lega_id/cmd', JSON.stringify(payload));
+                broadcastLog(`[Web] Semua jadwal pakan Kolam ${kolamId} di-reset / dinonaktifkan`, 'schedule');
+            } else {
+                alert('Gagal! Belum terhubung ke broker MQTT.');
+            }
+        }
+
         // 7. Menerima Data MQTT Realtime
         mqttClient.on('message', function (topic, message) {
             const payloadStr = message.toString();
 
-            // Log Realtime Terdistribusi
+            // Menerima Log Realtime Tunggal
             if (topic === 'lega_id/logs') {
                 try {
                     const logObj = JSON.parse(payloadStr);
-                    if (logData.length === 0 || logData[0].time !== logObj.time || logData[0].message !== logObj.message) {
-                        appendLogData(logObj);
+                    if (logObj.type === 'clear') {
+                        // Sinyal hapus log diterima dari perangkat lain
+                        logData = [];
+                        localStorage.removeItem(LOG_KEY);
+                        renderLogs();
+                    } else if (logObj.message) {
+                        if (logData.length === 0 || logData[0].time !== logObj.time || logData[0].message !== logObj.message) {
+                            appendLogData(logObj);
+                        }
+                    }
+                } catch(e) {}
+            }
+
+            // Sinkronisasi Riwayat Log Saat Baru Refresh / Buka Tab Baru
+            if (topic === 'lega_id/logs_sync') {
+                try {
+                    const syncList = JSON.parse(payloadStr);
+                    if (Array.isArray(syncList)) {
+                        logData = syncList;
+                        localStorage.setItem(LOG_KEY, JSON.stringify(logData));
+                        renderLogs();
                     }
                 } catch(e) {}
             }
@@ -605,12 +665,20 @@
                 try {
                     const data = JSON.parse(payloadStr);
 
-                    // Persentase Baterai Alat
+                    // Persentase & Volt Baterai Alat
                     const elBatteryLevel = document.getElementById('battery-level-display');
-                    const batIcon = document.getElementById('battery-icon');
+                    const elBatteryVolt  = document.getElementById('battery-volt-display');
+                    const batIcon        = document.getElementById('battery-icon');
+
                     if (elBatteryLevel && data.battery_level !== undefined) {
                         elBatteryLevel.textContent = data.battery_level + '%';
                         batIcon.className = 'fa-solid text-2xl mb-1';
+
+                        // Tampilkan tegangan baterai aktual (jika ada di data MQTT atau hitung estimasi 11.8V - 13.8V)
+                        let voltVal = data.battery_volt !== undefined ? parseFloat(data.battery_volt).toFixed(1) : (11.8 + (data.battery_level / 100.0) * 2.0).toFixed(1);
+                        if (elBatteryVolt) {
+                            elBatteryVolt.textContent = `(${voltVal}V)`;
+                        }
 
                         if (data.battery_level >= 75) {
                             batIcon.classList.add('fa-battery-full', 'text-emerald-500');
@@ -655,7 +723,7 @@
                             }
                         }
 
-                        // Sinkronisasi Switch Relay & Servo
+                        // Sinkronisasi Switch Relay & Servo secara Realtime
                         const inputs = card.querySelectorAll('input.action-toggle');
                         if (inputs.length >= 3) {
                             if (inputs[0].dataset.locked !== "true") inputs[0].checked = !!pond.in;
